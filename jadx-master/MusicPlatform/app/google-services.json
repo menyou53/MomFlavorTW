@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "313378253389",
+    "firebase_url": "https://music-platform-52bf1.firebaseio.com",
+    "project_id": "music-platform-52bf1",
+    "storage_bucket": "music-platform-52bf1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:313378253389:android:58d935871ac557df",
+        "android_client_info": {
+          "package_name": "com.example.youmen.musicplatform"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "313378253389-q5tjo39dbglg70ihmrgmrimaq3q91gj0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfD01k-O0YibJzUdbqoXw3o0fQU0Hnu-w"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
