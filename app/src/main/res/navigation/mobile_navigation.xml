@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.example.momflavortw.ui.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_fragment_image"
+            app:destination="@id/fragment_image" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_dashboard"
+        android:name="com.example.momflavortw.ui.dashboard.DashboardFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_dashboard" />
+
+    <fragment
+        android:id="@+id/navigation_cart"
+        android:name="com.example.momflavortw.ui.cart.CartFragment"
+        android:label="@string/title_cart"
+        tools:layout="@layout/fragment_cart" >
+
+        <action
+            android:id="@+id/action_navigation_cart_to_fragment_cart2"
+            app:destination="@id/fragment_cart2"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+             />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_notifications"
+        android:name="com.example.momflavortw.ui.notifications.NotificationsFragment"
+        android:label="@string/title_notifications"
+        tools:layout="@layout/fragment_notifications" />
+
+    <fragment
+        android:id="@+id/fragment_cart2"
+        android:name="com.example.momflavortw.ui.cart.Cart2Fragment"
+        android:label="cart2"
+        tools:layout="@layout/fragment_cart2"/>
+
+    <fragment
+        android:id="@+id/fragment_cart3"
+        android:name="com.example.momflavortw.ui.cart.Cart3Fragment"
+        android:label="cart3"
+        tools:layout="@layout/fragment_cart3"/>
+
+    <fragment
+        android:id="@+id/fragment_image"
+        android:name="com.example.momflavortw.ImagesFragment"
+        android:label="Image"
+        tools:layout="@layout/activity_images">
+        <action
+            android:id="@+id/action_fragment_image_to_fragment_product"
+            app:destination="@id/fragment_product" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_product"
+        android:name="com.example.momflavortw.ui.product.ProductFragment"
+        android:label="Product"
+        tools:layout="@layout/fragment_product">
+        <argument
+            android:name="name"
+            app:argType="string"
+            android:defaultValue="default" />
+    </fragment>
+</navigation>
