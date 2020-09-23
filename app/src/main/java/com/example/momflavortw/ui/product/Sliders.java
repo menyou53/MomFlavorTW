@@ -5,8 +5,12 @@ public class Sliders {
     private String mSlider1;
     private String mSlider2;
     private String mSlider3;
+    private String mImageUrl;
+    private String mSlider;
+    private int mPrice;
 
-    public Sliders(String name, String slider1, String slider2, String slider3){
+
+    public Sliders(String name, String slider1, String slider2, String slider3,int price,String slider){
         if(name.trim().equals("")){
             name = "no Name";
         }
@@ -14,6 +18,8 @@ public class Sliders {
         mSlider1 = slider1;
         mSlider2 = slider2;
         mSlider3 = slider3;
+        mPrice = price;
+        mSlider = slider;
     }
 
 public Sliders(){
@@ -48,5 +54,27 @@ public Sliders(){
         mSlider3 = slider3;
     }
 
+    public String getImageUrl() {
+        return mImageUrl;
+    }
 
+    public void setImageUrl(String ImageUrl) {
+        mImageUrl = ImageUrl;
+    }
+
+    public int getPrice() {
+        return mPrice;
+    }
+
+    public void setPrice(int Price) {
+        mPrice = Price;
+    }
+
+    public String getSlider() {
+        return mSlider;
+    }
+
+    public void setSlider(String Slider) {
+        mSlider = Slider;
+    }
 }

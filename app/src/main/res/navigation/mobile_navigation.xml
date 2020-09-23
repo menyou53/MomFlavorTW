@@ -12,14 +12,10 @@
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_navigation_home_to_fragment_image"
-            app:destination="@id/fragment_image" />
+            app:destination="@id/navigation_image" />
     </fragment>
 
-    <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.momflavortw.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+
 
     <fragment
         android:id="@+id/navigation_cart"
@@ -38,26 +34,41 @@
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.example.momflavortw.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:label="@string/title_more"
+        tools:layout="@layout/fragment_notifications" >
+        <action
+            android:id="@+id/action_navigation_notifications_to_fragment_history"
+            app:destination="@id/fragment_history" />
+    </fragment>
 
     <fragment
         android:id="@+id/fragment_cart2"
         android:name="com.example.momflavortw.ui.cart.Cart2Fragment"
         android:label="cart2"
-        tools:layout="@layout/fragment_cart2"/>
+        tools:layout="@layout/fragment_cart2">
+        <argument
+            android:name="total"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_fragment_cart2_to_fragment_cart3"
+            app:destination="@id/fragment_cart3" />
+    </fragment>
 
     <fragment
         android:id="@+id/fragment_cart3"
         android:name="com.example.momflavortw.ui.cart.Cart3Fragment"
         android:label="cart3"
-        tools:layout="@layout/fragment_cart3"/>
+        tools:layout="@layout/fragment_cart3">
+        <action
+            android:id="@+id/action_fragment_cart3_to_navigation_home"
+            app:destination="@id/navigation_home" />
+    </fragment>
 
     <fragment
-        android:id="@+id/fragment_image"
-        android:name="com.example.momflavortw.ImagesFragment"
+        android:id="@+id/navigation_image"
+        android:name="com.example.momflavortw.ui.image.ImagesFragment"
         android:label="Image"
-        tools:layout="@layout/activity_images">
+        tools:layout="@layout/fragment_images">
         <action
             android:id="@+id/action_fragment_image_to_fragment_product"
             app:destination="@id/fragment_product" />
@@ -71,5 +82,27 @@
             android:name="name"
             app:argType="string"
             android:defaultValue="default" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_history"
+        android:name="com.example.momflavortw.ui.notifications.history.HistoryFragment"
+        android:label="History"
+        tools:layout="@layout/fragment_history">
+        <action
+            android:id="@+id/action_fragment_history_to_fragment_history2"
+            app:destination="@id/fragment_history2" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/fragment_history2"
+        android:label="History2"
+        android:name="com.example.momflavortw.ui.notifications.history.History2Fragment"
+        tools:layout="@layout/fragment_history2">
+        <argument
+            android:name="date"
+            app:argType="string"
+            android:defaultValue="default"/>
     </fragment>
 </navigation>

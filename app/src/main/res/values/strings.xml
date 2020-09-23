@@ -2,8 +2,8 @@
     <string name="app_name">MomFlavorTW</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
-    <string name="title_cart">cart</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_cart">Cart</string>
+    <string name="title_more">More</string>
     <string name="facebook_app_id">771316143628969</string>
     <string name="fb_login_protocol_scheme">fb771316143628969</string>
     <string name="facebook_application_id" translatable="false">771316143628969</string>

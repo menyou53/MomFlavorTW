@@ -1,4 +1,4 @@
-package com.example.momflavortw;
+package com.example.momflavortw.ui.image;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.momflavortw.R;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
@@ -34,6 +35,8 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     }
 
 
+
+
     @NonNull
     @Override
     public ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -55,39 +58,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
             @Override
             public void onClick(View v) {
                 Log.d("getName",  "name =>"+uploadCurrent.getName()  );
-                /*
-                Query query = ref.whereEqualTo("name",uploadCurrent.getName());
-                query
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if(task.isSuccessful()){
-                                    for(QueryDocumentSnapshot document:task.getResult() ){
-                                        Log.d("TAG","success");
-                                        Log.d("TAG", document.getId() +"=>"+document.getData() );
-                                        Sliders sliders = document.toObject(Sliders.class);
-                                        String slider1 = sliders.getSlider1();
-                                        String slider2 = sliders.getSlider2();
-                                        String slider3 = sliders.getSlider3();
-                                        Log.d("TAG",  "slider1 =>"+ slider1 );
-                                        Log.d("TAG",  "slider2 =>"+ slider2 );
-                                        Log.d("TAG",  "slider3 =>"+ slider3 );
-                                    }
-
-                                } else {
-                                    Log.w("TAG", "Error getting documents.",task.getException());
-                                }
-
-                            }
-                        });
-
-*/
-                //AppCompatActivity activity = (AppCompatActivity) v.getContext();
-                //Fragment newFragment = new ProductFragment();
-                //activity.getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, newFragment).addToBackStack(null).commit();
                 final NavController navController = Navigation.findNavController(v);
-
                 Bundle bundle = new Bundle();
                 bundle.putString("name",uploadCurrent.getName());
                 navController.navigate(R.id.action_fragment_image_to_fragment_product,bundle);

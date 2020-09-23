@@ -1,18 +1,16 @@
-package com.example.momflavortw;
+package com.example.momflavortw.ui.image;
 
 class Upload {
     private String mName;
     private String mImageUrl;
 
-
     public Upload(){
 
     }
     public Upload(String name,String imageUrl){
-        if(name.trim().equals("")){
+        if(name.trim().equals("")) {
             name = "no Name";
         }
-
         mName = name;
         mImageUrl = imageUrl;
     }
@@ -29,6 +27,7 @@ class Upload {
     public void setImageUrl(String imageUrl){
         mImageUrl = imageUrl;
     }
+
 }
 
 
