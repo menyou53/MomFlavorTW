@@ -34,7 +34,7 @@ public class History2Fragment extends Fragment {
     private String date,total;
     private List<Purchased> mPurchased;
     private History2Adapter mAdapter;
-    private TextView textView1,textView2;
+    private TextView textViewDate,textViewTotal,textName,textPhone,textEmail;
     Handler handler = new Handler();
     Runnable setLayoutVisible;
 
@@ -54,11 +54,13 @@ public class History2Fragment extends Fragment {
         mRycyclerview = root.findViewById(R.id.recycler_view_history2_1);
         mRycyclerview.setHasFixedSize(true);
         mRycyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRycyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         mPurchased = new ArrayList<>();
         mRycyclerview.setLayoutManager(new GridLayoutManager(getActivity(), 1));
-        textView1 = root.findViewById(R.id.history2_text1);
-        textView2 = root.findViewById(R.id.history2_text2);
+        textViewDate = root.findViewById(R.id.history2_textDate);
+        textViewTotal = root.findViewById(R.id.history2_textTotal);
+        textName = root.findViewById(R.id.history2_textName);
+        textPhone = root.findViewById(R.id.history2_textPhone);
+        textEmail = root.findViewById(R.id.history2_textEmail);
         final LinearLayout linearLayout = root.findViewById(R.id.history2Linear);
         final ProgressBar progressBar = root.findViewById(R.id.historyProgressBar);
 
@@ -104,8 +106,8 @@ public class History2Fragment extends Fragment {
                                 String year = date.substring(0,4);
                                 String month = date.substring(5,7);
                                 String day = date.substring(8,10);
-                                String dateYMD =(year+"年"+month+"月"+day+"日").toString();
-                                textView1.setText(dateYMD);
+                                String dateYMD =(year+"年"+month+"月"+day+"日");
+                                textViewDate.setText(dateYMD);
                                 mPurchased.add(purchased);
                             }
                             mAdapter = new History2Adapter(getActivity(),mPurchased);
@@ -126,13 +128,33 @@ public class History2Fragment extends Fragment {
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
-                            Purchased purchased = document.toObject(Purchased.class);
-                            total = String.valueOf(purchased.getTotal());
-                            textView2.setText(total);
-                            handler.postDelayed(setLayoutVisible, 500);
+                            if(document.exists()){
+                                Purchased purchased = document.toObject(Purchased.class);
+                                total = String.valueOf(purchased.getTotal());
+                                textViewTotal.setText(total);
+                            }
                         }
                     }
                 });
+        db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("history").document(date).collection("info").document("userInfo")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful()){
+                            DocumentSnapshot document = task.getResult();
+                            if(document.exists()){
+                                UserInfo userInfo = document.toObject(UserInfo.class);
+                                textName.setText(userInfo.getName());
+                                textPhone.setText(userInfo.getPhone());
+                                textEmail.setText(userInfo.getEmail());
+                            }
+                            handler.postDelayed(setLayoutVisible, 500);
+
+                        }
+                    }
+                });
+
     }
 
 }

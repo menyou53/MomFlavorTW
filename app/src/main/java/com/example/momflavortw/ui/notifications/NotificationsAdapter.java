@@ -47,9 +47,14 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(position == 1){
-                    final NavController navController = Navigation.findNavController(v);
+                final NavController navController = Navigation.findNavController(v);
+
+                if(position == 0){
+                    navController.navigate(R.id.action_navigation_notifications_to_fragment_notice);
+                }else if(position == 1) {
                     navController.navigate(R.id.action_navigation_notifications_to_fragment_history);
+                }else if(position == 4) {
+                    navController.navigate(R.id.action_navigation_notifications_to_fragment_feedback);
                 } else if(position == 6){
                     Log.d("position",String.valueOf(position));
                     FirebaseAuth.getInstance().signOut();

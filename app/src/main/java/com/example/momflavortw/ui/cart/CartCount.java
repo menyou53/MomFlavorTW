@@ -1,7 +1,7 @@
 package com.example.momflavortw.ui.cart;
 
 public class CartCount {
-    private int sum;
+    private int sum = 0;
 
     public int getSum() {
         return sum;

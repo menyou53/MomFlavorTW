@@ -108,7 +108,7 @@ public class HomeFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("TAG(new)", document.getId() + "=>" + document.getData());
+                                //Log.d("TAG(new)", document.getId() + "=>" + document.getData());
                                 Upload upload = document.toObject(Upload.class);
                                 mUploads.add(upload);
                             }
@@ -127,7 +127,7 @@ public class HomeFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("TAG(pop)", document.getId() + "=>" + document.getData());
+                                //Log.d("TAG(pop)", document.getId() + "=>" + document.getData());
                                 Upload upload = document.toObject(Upload.class);
                                 mUploads2.add(upload);
                             }
@@ -152,7 +152,7 @@ public class HomeFragment extends Fragment {
                         if (task.isSuccessful()) {
                             List<SliderItem> sliderItemList = new ArrayList<>();
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("TAG", document.getId() + "=>" + document.getData());
+                                //Log.d("TAG", document.getId() + "=>" + document.getData());
                                 Sliders sliders = document.toObject(Sliders.class);
                                 SliderItem sliderItem = new SliderItem();
                                 sliderItem.setImageUrl(sliders.getSlider());

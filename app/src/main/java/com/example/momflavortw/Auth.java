@@ -71,9 +71,7 @@ public class Auth extends AppCompatActivity {
                     //This is a returning user
                 }
                 updateUI(FirebaseAuth.getInstance().getCurrentUser());
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
-                this.finish();
+
 
             } else {
                 // Signing in failed
@@ -93,11 +91,15 @@ public class Auth extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
         if(user!=null){
             String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             Map<String, Object> data = new HashMap<>();
             data.put("Email", userEmail);
             db.collection("User").document(userEmail)
                     .set(data);
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            this.finish();
 
         }
     }

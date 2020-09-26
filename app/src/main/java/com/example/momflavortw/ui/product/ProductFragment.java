@@ -60,13 +60,15 @@ public class ProductFragment extends Fragment {
     TextView notifictionNumber;
 
     BadgeDrawable badge_dashboard;
-
+    BottomNavigationView navBottomView;
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         BottomNavigationView navBottomView = ((AppCompatActivity)this.getContext()).findViewById(R.id.nav_view);
         badge_dashboard = navBottomView.getOrCreateBadge(R.id.navigation_cart);
-
+        if(sum == 0){
+            badge_dashboard.setVisible(false);
+        }
 
     }
 
@@ -197,7 +199,7 @@ public class ProductFragment extends Fragment {
         cartdata.put("price",price);
 
         db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("total").document("total")
-                .update(data);
+                .set(data, SetOptions.merge());
 
         db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("cart").document(name)
                 .set(cartdata, SetOptions.merge());
@@ -211,17 +213,20 @@ public class ProductFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
-                            // Document found in the offline cache
+                                // Document found in the offline cache
                             DocumentSnapshot document = task.getResult();
-                            CartCount cartCount = document.toObject(CartCount.class);
-                            sum = cartCount.getSum();
-                            badge_dashboard.setBackgroundColor(Color.RED);
-                            badge_dashboard.setBadgeTextColor(Color.WHITE);
-                            badge_dashboard.setMaxCharacterCount(3);
-                            badge_dashboard.setNumber(sum);
-                            badge_dashboard.setVisible(true);
-                            Log.d(TAG, "Cached document data: " + document.getData());
-                            Log.d(TAG, "sum = "+sum);
+                            if (document.exists()) {
+
+                                CartCount cartCount = document.toObject(CartCount.class);
+                                sum = cartCount.getSum();
+                                badge_dashboard.setBackgroundColor(Color.RED);
+                                badge_dashboard.setBadgeTextColor(Color.WHITE);
+                                badge_dashboard.setMaxCharacterCount(3);
+                                badge_dashboard.setNumber(sum);
+                                badge_dashboard.setVisible(true);
+                                Log.d(TAG, "Cached document data: " + document.getData());
+                                Log.d(TAG, "sum = " + sum);
+                            }
                         } else {
                             Log.d(TAG, "Cached get failed: ", task.getException());
                         }

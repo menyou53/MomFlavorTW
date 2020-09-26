@@ -30,11 +30,11 @@ public class NotificationsFragment extends Fragment {
 
 
         items = new ArrayList<>();
-        items.add("1st item");
+        items.add("Notice");
         items.add("Purchase History");
         items.add("3rd item");
         items.add("4th item");
-        items.add("5th item");
+        items.add("Feedback");
         items.add("6th item");
         items.add("Sign Out");
 

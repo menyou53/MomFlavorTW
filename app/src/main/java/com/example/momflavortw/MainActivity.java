@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.momflavortw.data.NoticeCount;
 import com.example.momflavortw.databinding.ActivityMainBinding;
 import com.example.momflavortw.ui.cart.CartCount;
 import com.example.momflavortw.ui.home.HomeFragment;
@@ -26,6 +27,9 @@ import androidx.navigation.ui.NavigationUI;
 import static android.content.ContentValues.TAG;
 
 public class MainActivity extends AppCompatActivity {
+    int notice = 0;
+    int sum = 0;
+    int notRead = 0;
 
     ActivityMainBinding binding;
     NavController navController;
@@ -36,12 +40,10 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        //BottomNavigationView navView = findViewById(R.id.nav_view);
-
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_home,R.id.navigation_image, R.id.navigation_cart, R.id.navigation_notifications)
                 .build();
-         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
@@ -50,8 +52,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }else {
-
             setBadge();
+            setBadgeNotice();
         }
     }
     @Override
@@ -83,26 +85,66 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
-                            // Document found in the offline cache
                             DocumentSnapshot document = task.getResult();
-                            CartCount cartCount = document.toObject(CartCount.class);
-                            int sum = cartCount.getSum();
-                            Log.d(TAG, "Cached document data: " + document.getData());
-                            Log.d(TAG, "sum = " + sum);
-
-                            BadgeDrawable badge_dashboard = binding.navView.getOrCreateBadge(R.id.navigation_cart);
-                            badge_dashboard.setBackgroundColor(Color.RED);
-                            badge_dashboard.setBadgeTextColor(Color.WHITE);
-                            badge_dashboard.setMaxCharacterCount(3);
-                            badge_dashboard.setNumber(sum);
-                            badge_dashboard.setVisible(true);
+                            if (document.exists()) {
+                                CartCount cartCount = document.toObject(CartCount.class);
+                                sum = cartCount.getSum();
+                                Log.d(TAG, "Cached document data: " + document.getData());
+                                Log.d(TAG, "sum = " + sum);
+                                BadgeDrawable badge_dashboard = binding.navView.getOrCreateBadge(R.id.navigation_cart);
+                                if(sum>0) {
+                                    badge_dashboard.setBackgroundColor(Color.RED);
+                                    badge_dashboard.setBadgeTextColor(Color.WHITE);
+                                    badge_dashboard.setMaxCharacterCount(3);
+                                    badge_dashboard.setNumber(sum);
+                                    badge_dashboard.setVisible(true);
+                                }else{
+                                    badge_dashboard.setVisible(false);
+                                }
+                            }else{
+                                Log.d(TAG, "sum not exist");
+                            }
                         } else {
                             Log.d(TAG, "Cached get failed: ", task.getException());
                         }
                     }
                 });
+    }
+    public void setBadgeNotice(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("noticeCount").document("NoticeCount")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                NoticeCount noticecount = document.toObject(NoticeCount.class);
+                                notice = noticecount.getNotice();
+                                notRead = noticecount.getNotRead();
+                                Log.d(TAG, "notice =  " + notice);
+                                Log.d(TAG, "notRead =  " + notRead);
+                                BadgeDrawable badge_dashboard = binding.navView.getOrCreateBadge(R.id.navigation_notifications);
+                                if(notRead >0 ) {
+                                    badge_dashboard.setBackgroundColor(Color.RED);
+                                    badge_dashboard.setMaxCharacterCount(3);
+                                    badge_dashboard.setNumber(notRead);
+                                    badge_dashboard.setVisible(true);
 
-     }
+                                }else{
+                                    badge_dashboard.setVisible(false);
+                                }
+                            }else{
+                                Log.d(TAG, "notcie not exist");
+
+                            }
+                        }else {
+                            Log.d(TAG, "Cached get failed: ", task.getException());
+                        }
+                    }
+                });
+    }
 
 
 }

@@ -28,6 +28,7 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -42,33 +43,65 @@ public class CartFragment extends Fragment {
     private RecyclerView mRycyclerview;
     private CartAdapter mAdapter;
     private List<Cart> mCart;
-    TextView textTotal;
+    TextView textView;
     int total,sum;
+    ConstraintLayout constraintLayout;
     BadgeDrawable badge_dashboard;
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         BottomNavigationView navBottomView = ((AppCompatActivity)this.getContext()).findViewById(R.id.nav_view);
         badge_dashboard = navBottomView.getOrCreateBadge(R.id.navigation_cart);
+        if(sum == 0){
+            badge_dashboard.setVisible(false);
+        }
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.fragment_cart, container, false);
 
-
-
+        constraintLayout = root.findViewById(R.id.ConstraintLayoutCart);
         mRycyclerview = root.findViewById(R.id.recycler_view_cart);
         mRycyclerview.setHasFixedSize(true);
         mRycyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRycyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         mCart = new ArrayList<>();
         mRycyclerview.setLayoutManager(new GridLayoutManager(getActivity(), 1));
-        textTotal = root.findViewById(R.id.text_total);
-
+        textView = root.findViewById(R.id.textCart);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("total").document("total")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                CartCount cartCount = document.toObject(CartCount.class);
+                                sum = cartCount.getSum();
+                                Log.d(TAG, "Cached document data: " + document.getData());
+                                Log.d(TAG, "sum = " + sum);
+                                if (sum > 0) {
+                                    constraintLayout.setVisibility(View.VISIBLE);
+                                    textView.setVisibility(View.GONE);
+                                }else{
+                                    textView.setVisibility(View.VISIBLE);
+                                }
+                            }else {
+                                textView.setVisibility(View.VISIBLE);
+                            }
+                        } else {
+                            Log.d(TAG, "Cached get failed: ", task.getException());
+                        }
+                    }
+                });
+
+
+
         db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("cart")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -117,7 +150,7 @@ public class CartFragment extends Fragment {
         Map<String, Object> checkdata = new HashMap<>();
         checkdata.put("total",total);
         db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("total").document("checked")
-                .update(checkdata);
+                .set(checkdata, SetOptions.merge());
 
     }
 
@@ -159,15 +192,20 @@ public class CartFragment extends Fragment {
                         if (task.isSuccessful()) {
                             // Document found in the offline cache
                             DocumentSnapshot document = task.getResult();
-                            CartCount cartCount = document.toObject(CartCount.class);
-                            sum = cartCount.getSum();
-                            badge_dashboard.setBackgroundColor(Color.RED);
-                            badge_dashboard.setBadgeTextColor(Color.WHITE);
-                            badge_dashboard.setMaxCharacterCount(3);
-                            badge_dashboard.setNumber(sum);
-                            badge_dashboard.setVisible(true);
-                            Log.d(TAG, "Cached document data: " + document.getData());
-                            Log.d(TAG, "sum = "+sum);
+                            if (document.exists()) {
+
+                                CartCount cartCount = document.toObject(CartCount.class);
+                                sum = cartCount.getSum();
+                                Log.d(TAG, "Cached document data: " + document.getData());
+                                Log.d(TAG, "sum = " + sum);
+                                if (sum > 0) {
+                                    badge_dashboard.setBackgroundColor(Color.RED);
+                                    badge_dashboard.setBadgeTextColor(Color.WHITE);
+                                    badge_dashboard.setMaxCharacterCount(3);
+                                    badge_dashboard.setNumber(sum);
+                                    badge_dashboard.setVisible(true);
+                                }
+                            }
                         } else {
                             Log.d(TAG, "Cached get failed: ", task.getException());
                         }

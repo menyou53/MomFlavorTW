@@ -61,9 +61,12 @@ public class Cart2Fragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         DocumentSnapshot document = task.getResult();
-                        Cart cart = document.toObject( Cart.class);
-                        total = cart.getTotal();
-                        textTotal.setText(String.valueOf(total));
+                        if (document.exists()) {
+
+                            Cart cart = document.toObject(Cart.class);
+                            total = cart.getTotal();
+                            textTotal.setText(String.valueOf(total));
+                        }
                     }
                 });
 
