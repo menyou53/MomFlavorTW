@@ -7,6 +7,9 @@ class Cart {
     private int mPrice;
     private int mPriceCount;
     private int mTotal;
+    private String mCapacity = "";
+    private String mChoice = "";
+    private String mProduct;
     public Cart(){
 
     }
@@ -66,6 +69,30 @@ class Cart {
 
     public void setTotal(int Total) {
         mTotal = Total;
+    }
+
+    public String getCapacity() {
+        return mCapacity;
+    }
+
+    public void setCapacity(String capacity) {
+        this.mCapacity = capacity;
+    }
+
+    public String getChoice() {
+        return mChoice;
+    }
+
+    public void setChoice(String choice) {
+        this.mChoice = choice;
+    }
+
+    public String getProduct() {
+        return mProduct;
+    }
+
+    public void setProduct(String product) {
+        this.mProduct = product;
     }
 }
 

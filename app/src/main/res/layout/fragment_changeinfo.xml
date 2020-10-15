@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="?attr/actionBarSize">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="-16dp"
+        tools:layout_editor_absoluteY="16dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/changeNane"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="32dp"
+                android:text="訂購人"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/changeNameRemind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="請輸入訂購人名稱"
+                android:textColor="@color/fui_bgEmail"
+                android:visibility="invisible"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/changeNane"
+                app:layout_constraintStart_toEndOf="@+id/changeNane"
+                app:layout_constraintTop_toTopOf="@+id/changeNane" />
+
+            <EditText
+                android:id="@+id/changeEditName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:inputType="textPersonName"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/changeNane" />
+
+            <TextView
+                android:id="@+id/changePhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:textSize="20sp"
+                android:text="電話"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/changeEditName" />
+
+            <TextView
+                android:id="@+id/changePhoneRemind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="請輸入電話"
+                android:textColor="@color/fui_bgEmail"
+                android:visibility="invisible"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/changePhone"
+                app:layout_constraintStart_toEndOf="@+id/changePhone"
+                app:layout_constraintTop_toTopOf="@+id/changePhone" />
+
+            <EditText
+                android:id="@+id/changeEditPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:inputType="phone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/changePhone" />
+
+            <TextView
+                android:id="@+id/changeEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:textSize="20sp"
+                android:text="Email"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/changeEditPhone" />
+
+            <TextView
+                android:id="@+id/changeEmailRemind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="請輸入Email"
+                android:textColor="@color/fui_bgEmail"
+                android:visibility="invisible"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/changeEmail"
+                app:layout_constraintStart_toEndOf="@+id/changeEmail"
+                app:layout_constraintTop_toTopOf="@+id/changeEmail" />
+
+            <EditText
+                android:id="@+id/changeEditEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:inputType="textEmailAddress"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/changeEmail" />
+
+            <Button
+                android:id="@+id/changeInfoButton"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:layout_marginTop="8dp"
+                android:text="確認修改
+"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/changeEditEmail" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,8 +13,10 @@ import com.example.momflavortw.data.NoticeCount;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -89,8 +91,9 @@ public class NoticeFragment extends Fragment {
                     }
                 });
 
-
-        db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("notice")
+        CollectionReference ref = db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("notice");
+        Query query = ref.orderBy("date", Query.Direction.DESCENDING);
+        query
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

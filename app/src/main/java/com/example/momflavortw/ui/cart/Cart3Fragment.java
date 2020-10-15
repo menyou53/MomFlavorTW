@@ -22,6 +22,7 @@ import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -45,10 +46,10 @@ import static android.content.ContentValues.TAG;
 
 public class Cart3Fragment extends Fragment {
 
-    int total ;
     private List<Cart> mCart;
+    private int payment,total,shipping;
+    private String paymentSt,ship;
     BadgeDrawable badge_dashboard;
-    BottomNavigationView navBottomView;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -70,8 +71,21 @@ public class Cart3Fragment extends Fragment {
         final TextView remindName = root.findViewById(R.id.textViewRemindName);
         final TextView remindPhone = root.findViewById(R.id.textViewRemindPhone);
         final TextView remindEmail = root.findViewById(R.id.textViewRemindEmail);
+        final TextView paymentText =root.findViewById(R.id.cart3_paymentText);
         mCart = new ArrayList<>();
 
+        if(getArguments() != null){
+            shipping = getArguments().getInt("shipping");
+            ship = getArguments().getString("ship");
+            total = getArguments().getInt("total");
+            payment = getArguments().getInt("payment");
+            Log.d(TAG,"payment= "+payment);
+        }
+        if(payment == 1) {
+            paymentSt = "匯款";
+        }else if(payment == 2){
+            paymentSt = "面交";
+        }
 
 
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -101,7 +115,7 @@ public class Cart3Fragment extends Fragment {
 
         final Map<String, Object> history = new HashMap<>();
         final Map<String, Object> purchased = new HashMap<>();
-
+        history.put("total",total);
 
         db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("cart")
                 .get()
@@ -112,7 +126,7 @@ public class Cart3Fragment extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Cart cart = document.toObject(Cart.class);
 
-                                history.put(cart.getName(),cart.getNum());
+                                history.put(cart.getProduct(),cart.getNum());
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                             }
                         } else {
@@ -120,7 +134,7 @@ public class Cart3Fragment extends Fragment {
                         }
                     }
                 });
-        db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("total").document("checked")
+     /*   db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("total").document("checked")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -131,7 +145,7 @@ public class Cart3Fragment extends Fragment {
                             history.put("total", cart.getTotal());
                         }
                     }
-                });
+                });*/
 
 
 
@@ -166,7 +180,7 @@ public class Cart3Fragment extends Fragment {
                 } else {
 
                     final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setMessage("name: " + editName.getText().toString() + "\n\nphone: " + editPhone.getText().toString() + "\n\nemail: " + editMail.getText().toString());
+                    builder.setMessage("購買人: " + editName.getText().toString() + "\n\n電話: " + editPhone.getText().toString() + "\n\nemail: " + editMail.getText().toString()+"\n\n付款方式: "+paymentSt+"\n\n取貨方式: "+ship);
                     builder.setPositiveButton("確認", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -176,6 +190,16 @@ public class Cart3Fragment extends Fragment {
                             InfoData.put("name", editName.getText().toString());
                             InfoData.put("phone", editPhone.getText().toString());
                             InfoData.put("email", editMail.getText().toString());
+                            InfoData.put("payment",paymentSt);
+                            InfoData.put("payed",0);
+                            InfoData.put("ship",ship);
+                            InfoData.put("shipping",shipping);
+                            if(payment == 1){
+                                InfoData.put("status","待匯款");
+                            }else if(payment == 2){
+                                InfoData.put("status","商品準備中");
+                            }
+                            InfoData.put("changeable",1);
 
                             db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("history").document(rt)
                                     .set(history);
@@ -194,6 +218,12 @@ public class Cart3Fragment extends Fragment {
                                                     purchased.put("imageUrl", cart.getImageUrl());
                                                     purchased.put("num", cart.getNum());
                                                     purchased.put("price", cart.getPrice());
+                                                    purchased.put("product",cart.getProduct());
+
+                                                    Map<String,Object> stock = new HashMap<>();
+                                                    stock.put("stock", FieldValue.increment(-(cart.getNum())));
+                                                    db.collection("products").document(cart.getProduct())
+                                                            .update(stock);
 
                                                     db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("Purchased")
                                                             .add(purchased);
@@ -222,6 +252,21 @@ public class Cart3Fragment extends Fragment {
                             db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("history").document(rt).collection("info").document("userInfo")
                                     .set(InfoData);
 
+                            Map<String,Object> Orderdata = new HashMap<>();
+                            Orderdata.put("date",rt);
+                            Orderdata.put("email",FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                            Orderdata.put("payment",paymentSt);
+                            Orderdata.put("payed",0);
+                            if(payment == 1){
+                                Orderdata.put("status","待匯款");
+                            }else if(payment == 2){
+                                Orderdata.put("status","商品準備中");
+                            }
+                            db.collection("Order").document(rt+"-"+FirebaseAuth.getInstance().getCurrentUser().getEmail())
+                                    .set(Orderdata);
+
+
+
                             clearCart();
 
 
@@ -246,6 +291,9 @@ public class Cart3Fragment extends Fragment {
                             LinearLayout.LayoutParams positiveButtonLL = (LinearLayout.LayoutParams) positiveButton2.getLayoutParams();
                             positiveButtonLL.gravity = Gravity.CENTER;
                             positiveButton2.setLayoutParams(positiveButtonLL);
+                            dialog2.setCanceledOnTouchOutside(false);
+                            dialog2.setCancelable(false);
+
 
 
 

@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="?attr/actionBarSize">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textPicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="32dp"
+                android:textSize="20sp"
+                android:text="收件人姓名"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/paymentTitle" />
+
+            <EditText
+                android:id="@+id/editTextPicker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:hint="收件人姓名"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="@+id/textPicker"
+                app:layout_constraintTop_toBottomOf="@+id/textPicker" />
+
+            <TextView
+                android:id="@+id/textPickerNotice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:textSize="12sp"
+                android:text="*請輸入收件人姓名"
+                android:textColor="@color/red"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/textPicker"
+                app:layout_constraintStart_toEndOf="@+id/textPicker"
+                app:layout_constraintTop_toTopOf="@+id/textPicker" />
+
+            <TextView
+                android:id="@+id/textAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="收件人地址"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="@+id/editTextPicker"
+                app:layout_constraintTop_toBottomOf="@+id/editTextPicker" />
+
+            <EditText
+                android:id="@+id/editTextAdress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ems="16"
+                android:textSize="16sp"
+                android:hint="收件人地址"
+                app:layout_constraintStart_toStartOf="@+id/textAddress"
+                app:layout_constraintTop_toBottomOf="@+id/textAddress" />
+
+            <CheckBox
+                android:id="@+id/checkBoxSavePayment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:checked="true"
+                android:textSize="16sp"
+                android:text="下次開始自動輸入收件人姓名及地址"
+                app:layout_constraintStart_toStartOf="@+id/editTextAdress"
+                app:layout_constraintTop_toBottomOf="@+id/editTextAdress" />
+
+            <TextView
+                android:id="@+id/textAdressNotice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="＊請輸入收件人地址"
+                android:textColor="@color/red"
+                android:visibility="invisible"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/textAddress"
+                app:layout_constraintStart_toEndOf="@+id/textAddress"
+                app:layout_constraintTop_toTopOf="@+id/textAddress" />
+
+            <TextView
+                android:id="@+id/paymentTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="匯款資訊"
+                android:textSize="30sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/accountNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:text="帳號"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/checkBoxSavePayment" />
+
+            <TextView
+                android:id="@+id/accountNumNotice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="*please enter account num"
+                android:visibility="invisible"
+                android:textColor="@color/red"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/accountNum"
+                app:layout_constraintStart_toEndOf="@+id/accountNum"
+                app:layout_constraintTop_toTopOf="@+id/accountNum" />
+
+            <EditText
+                android:id="@+id/editTextAccountNum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="請輸入帳號後5碼"
+                android:inputType="number"
+                android:maxLength="5"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="@+id/accountNum"
+                app:layout_constraintTop_toBottomOf="@+id/accountNum" />
+
+            <TextView
+                android:id="@+id/payDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:textSize="20sp"
+                android:text="匯款日期"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editTextAccountNum" />
+
+            <TextView
+                android:id="@+id/payDateNotice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="*please enter date"
+                android:visibility="invisible"
+                android:textColor="@color/red"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/payDate"
+                app:layout_constraintStart_toEndOf="@+id/payDate"
+                app:layout_constraintTop_toTopOf="@+id/payDate" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayoutChooseDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/payDate">
+
+                <ImageView
+                    android:id="@+id/imageShowCalender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/textCalender"
+                    app:layout_constraintStart_toEndOf="@+id/textCalender"
+                    app:layout_constraintTop_toTopOf="@+id/textCalender"
+                    app:srcCompat="@drawable/ic_baseline_expand_more_24" />
+
+                <TextView
+                    android:id="@+id/textCalender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="選擇日期"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintCalender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayoutChooseDate">
+
+                <CalendarView
+                    android:id="@+id/calendarView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/Remarks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="備註"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="@+id/constraintLayoutChooseDate"
+                app:layout_constraintTop_toBottomOf="@+id/constraintCalender" />
+
+            <EditText
+                android:id="@+id/editTextRemarks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="24dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="4dp"
+                android:textSize="16sp"
+                android:background="@android:drawable/edit_text"
+                android:ems="10"
+                android:inputType="textMultiLine"
+                android:maxLines="5"
+                android:minLines="4"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/Remarks"
+                app:layout_constraintTop_toBottomOf="@+id/Remarks" />
+
+            <Button
+                android:id="@+id/paymentButton"
+                android:layout_width="118dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="24dp"
+                android:text="送出"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editTextRemarks" />
+
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,21 +21,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="invisible"
-        tools:context=".ui.home.HomeFragment"
-        android:paddingBottom="?attr/actionBarSize">
-
+        tools:context=".ui.home.HomeFragment">
 
 
         <ScrollView
-            android:id="@+id/scrollView2"
+            android:id="@+id/scrollViewHome"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
 
 

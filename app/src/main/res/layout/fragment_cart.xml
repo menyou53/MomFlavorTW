@@ -49,6 +49,7 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <Button
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:id="@+id/Checkout"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

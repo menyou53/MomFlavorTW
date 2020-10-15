@@ -53,38 +53,126 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="30dp">
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="32dp"
+                    android:paddingRight="16dp"
+                    android:paddingLeft="16dp">
 
+
+                    <TextView
+                        android:id="@+id/textProductTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text=""
+                        android:textSize="24sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textProductStock"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="out of stock"
+                        android:textColor="@color/red"
+                        android:textSize="16sp"
+                        android:visibility="gone"
+                        app:layout_constraintStart_toStartOf="@+id/textProductTitle"
+                        app:layout_constraintTop_toBottomOf="@+id/textProductTitle" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/product_recyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textPrice" >
+
+                    </androidx.recyclerview.widget.RecyclerView>
+
+                    <LinearLayout
+                        android:id="@+id/linearLayoutMarkup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="vertical"
+                        app:layout_constraintStart_toStartOf="@+id/product_recyclerView"
+                        app:layout_constraintTop_toBottomOf="@+id/product_recyclerView" />
 
                     <TextView
                         android:id="@+id/textPrice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="30dp"
-                        android:text="TextView"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:layout_marginTop="8dp"
+                        android:textSize="20sp"
+                        android:text=""
+                        app:layout_constraintStart_toStartOf="@+id/textProductTitle"
+                        app:layout_constraintTop_toBottomOf="@+id/textProductTitle" />
 
                     <Spinner
                         android:id="@+id/spinner"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/renewButton" />
+                        android:layout_marginStart="8dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/renewButton"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/renewButton" />
 
                     <Button
                         android:id="@+id/renewButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:text="add to cart"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/linearLayoutMarkup" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintVideo"
+                android:layout_width="match_parent"
+                android:layout_height="210dp"
+                android:layout_margin="16dp">
 
-    </LinearLayout>
+                <WebView
+                    android:id="@+id/product_webView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="1dp"
+                android:background="@color/wordGray">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:background="@color/white"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:id="@+id/textNarrative"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:textSize="16dp"
+                        android:textColor="@color/black"
+                        android:text="TextView" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </LinearLayout>
 </ScrollView>
 
 </android.widget.RelativeLayout>

@@ -7,6 +7,8 @@ class Purchased {
     private int mNum;
     private int mPrice;
     private int mTotal;
+    private String product;
+    private boolean cancelProposed;
     public Purchased(){
 
     }
@@ -57,6 +59,22 @@ class Purchased {
 
     public void setTotal(int total) {
         mTotal = total;
+    }
+
+    public String getProduct() {
+        return product;
+    }
+
+    public void setProduct(String product) {
+        this.product = product;
+    }
+
+    public boolean isCancelProposed() {
+        return cancelProposed;
+    }
+
+    public void setCancelProposed(boolean cancelProposed) {
+        this.cancelProposed = cancelProposed;
     }
 }
 

@@ -29,37 +29,38 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView"
-            android:textSize="18sp"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginEnd="30dp"/>
+            app:layout_constraintStart_toStartOf="@+id/text_view_product_name2"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_product_name2" />
 
         <TextView
             android:id="@+id/text_view_product_name2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="16dp"
             android:text="Name"
             android:textColor="@android:color/black"
-            android:textSize="24sp"
+            android:ellipsize="end"
+            android:maxEms="12"
+            android:singleLine="true"
+            android:textSize="16sp"
             app:layout_constraintStart_toEndOf="@+id/image_view_cart2"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <TextView
             android:id="@+id/text_view_product_count2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
             android:text="X"
             android:textColor="@android:color/black"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/text_cart2_price"
-            app:layout_constraintStart_toEndOf="@+id/text_view_product_name2"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/text_cart2_price"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/text_cart2_price" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

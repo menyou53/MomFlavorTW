@@ -54,8 +54,9 @@ public class CartFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         BottomNavigationView navBottomView = ((AppCompatActivity)this.getContext()).findViewById(R.id.nav_view);
         badge_dashboard = navBottomView.getOrCreateBadge(R.id.navigation_cart);
-        if(sum == 0){
-            badge_dashboard.setVisible(false);
+        badge_dashboard.setVisible(false);
+        if(sum != 0){
+            badge_dashboard.setVisible(true);
         }
     }
 
@@ -71,6 +72,8 @@ public class CartFragment extends Fragment {
         mCart = new ArrayList<>();
         mRycyclerview.setLayoutManager(new GridLayoutManager(getActivity(), 1));
         textView = root.findViewById(R.id.textCart);
+
+        renewNotification();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("total").document("total")
@@ -167,13 +170,12 @@ public class CartFragment extends Fragment {
             num = Integer.parseInt(textNum.getText().toString());
             sum = sum+num;
             cartdata.put("num",num);
-            TextView textName = ((TextView) mRycyclerview.findViewHolderForAdapterPosition(i)
-                    .itemView.findViewById(R.id.text_view_product_name));
+            TextView textName = ((TextView) mRycyclerview.findViewHolderForAdapterPosition(i).itemView.findViewById(R.id.text_view_product_name));
             checkdata.put(textName.getText().toString(),num);
             db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("cart").document(textName.getText().toString())
                     .set(cartdata, SetOptions.merge());
             db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("total").document("checked")
-                    .update(checkdata);
+                .update(checkdata);
             db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("total").document("total")
                     .update(checkdata);
         }

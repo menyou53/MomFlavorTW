@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.momflavortw.R;
 
@@ -16,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class NotificationsFragment extends Fragment {
 
-    private RecyclerView mRycyclerview;
+    private RecyclerView mRecyclerView;
     private NotificationsAdapter mAdapter;
     private ArrayList<String> items;
 
@@ -32,16 +33,28 @@ public class NotificationsFragment extends Fragment {
         items = new ArrayList<>();
         items.add("Notice");
         items.add("Purchase History");
-        items.add("3rd item");
+        items.add("chat");
         items.add("4th item");
         items.add("Feedback");
         items.add("6th item");
         items.add("Sign Out");
 
-        mRycyclerview = root.findViewById(R.id.recycler_view_notification);
-        mRycyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView = root.findViewById(R.id.recycler_view_notification);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new NotificationsAdapter(getActivity(),items);
-        mRycyclerview.setAdapter(mAdapter);
+        mRecyclerView.setAdapter(mAdapter);
+
+        mRecyclerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int itemPosition = mRecyclerView.getChildLayoutPosition(v);
+                String item = items.get(itemPosition);
+                Toast.makeText(getActivity(), item, Toast.LENGTH_LONG).show();
+
+
+
+            }
+        });
 
         return root;
     }

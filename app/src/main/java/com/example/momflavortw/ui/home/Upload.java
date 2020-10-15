@@ -3,6 +3,7 @@ package com.example.momflavortw.ui.home;
 class Upload {
     private String mName;
     private String mImageUrl;
+    private String mProduct;
 
     public Upload(){
 
@@ -28,6 +29,13 @@ class Upload {
         mImageUrl = imageUrl;
     }
 
+    public String getProduct() {
+        return mProduct;
+    }
+
+    public void setProduct(String product) {
+        this.mProduct = product;
+    }
 }
 
 

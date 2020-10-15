@@ -1,7 +1,10 @@
 package com.example.momflavortw;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -13,16 +16,25 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import io.kommunicate.Kommunicate;
 
 import static android.content.ContentValues.TAG;
 
@@ -30,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     int notice = 0;
     int sum = 0;
     int notRead = 0;
+    FirebaseFirestore db;
+    CollectionReference ref;
 
     ActivityMainBinding binding;
     NavController navController;
@@ -55,6 +69,32 @@ public class MainActivity extends AppCompatActivity {
             setBadge();
             setBadgeNotice();
         }
+
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "getInstanceId failed", task.getException());
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                        Map<String, Object> data = new HashMap<>();
+                        data.put("token",token);
+                        db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail())
+                                .update(data);
+                        Kommunicate.updateDeviceToken(getApplicationContext(), token);
+
+
+                        // Log and toast
+                        Log.d(TAG, token);
+                        //Toast.makeText(MainActivity.this, token, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
     }
     @Override
     public boolean onSupportNavigateUp() {
@@ -144,6 +184,21 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+    private void notification(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel channel =
+                    new NotificationChannel("n","n", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"n")
+                .setContentText("Code Sphere")
+                .setSmallIcon(R.drawable.ic_notifications_black_24dp)
+                .setAutoCancel(true)
+                .setContentText("data is addded");
+        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
+        managerCompat.notify(999,builder.build());
     }
 
 

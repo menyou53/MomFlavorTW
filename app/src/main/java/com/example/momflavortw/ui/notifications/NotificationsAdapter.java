@@ -25,7 +25,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     private LayoutInflater layoutInflater;
     private List<String> data;
 
-    NotificationsAdapter(Context context,List<String> data){
+     NotificationsAdapter(Context context, List<String> data){
         this.layoutInflater = LayoutInflater.from(context);
         this.data = data;
     }
@@ -53,7 +53,10 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                     navController.navigate(R.id.action_navigation_notifications_to_fragment_notice);
                 }else if(position == 1) {
                     navController.navigate(R.id.action_navigation_notifications_to_fragment_history);
-                }else if(position == 4) {
+                }else if(position == 2){
+                    navController.navigate(R.id.action_navigation_notifications_to_fragment_chat);
+                }
+                else if(position == 4) {
                     navController.navigate(R.id.action_navigation_notifications_to_fragment_feedback);
                 } else if(position == 6){
                     Log.d("position",String.valueOf(position));

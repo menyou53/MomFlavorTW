@@ -65,7 +65,6 @@ class HistoyAdapter extends RecyclerView.Adapter<HistoyAdapter.ImageViewHolder> 
             @Override
             public void onClick(View v) {
                 Log.d(TAG,"date="+date);
-
                 Bundle bundle = new Bundle();
                 bundle.putString("date",date);
                 Navigation.findNavController(v).navigate(R.id.action_fragment_history_to_fragment_history2, bundle);

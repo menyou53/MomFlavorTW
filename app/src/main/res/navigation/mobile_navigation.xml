@@ -11,8 +11,8 @@
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_navigation_home_to_fragment_image"
-            app:destination="@id/navigation_image" />
+            android:id="@+id/action_navigation_home_to_fragment_product"
+            app:destination="@id/fragment_product" />
     </fragment>
 
 
@@ -45,6 +45,9 @@
         <action
             android:id="@+id/action_navigation_notifications_to_fragment_feedback"
             app:destination="@id/fragment_feedback" />
+        <action
+            android:id="@+id/action_navigation_notifications_to_fragment_chat"
+            app:destination="@id/fragment_chat" />
     </fragment>
 
     <fragment
@@ -64,7 +67,22 @@
         android:id="@+id/fragment_cart3"
         android:name="com.example.momflavortw.ui.cart.Cart3Fragment"
         android:label="cart3"
-        tools:layout="@layout/fragment_cart3"/>
+        tools:layout="@layout/fragment_cart3">
+        <argument
+            android:name="payment"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <argument
+            android:name="total"
+            app:argType="integer" />
+        <argument
+            android:name="ship"
+            app:argType="string"
+            android:defaultValue="default" />
+        <argument
+            android:name="shipping"
+            app:argType="integer" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_image"
@@ -81,9 +99,31 @@
         android:label="Product"
         tools:layout="@layout/fragment_product">
         <argument
-            android:name="name"
+            android:name="product"
             app:argType="string"
             android:defaultValue="default" />
+        <argument
+            android:name="stock"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <argument
+            android:name="price"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <argument
+            android:name="imageUrl"
+            android:defaultValue="default" />
+        <argument
+            android:name="videoUrl"
+            app:argType="string"
+            android:defaultValue="default" />
+        <argument
+            android:name="mark"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <action
+            android:id="@+id/action_fragment_product_to_navigation_cart"
+            app:destination="@id/navigation_cart" />
     </fragment>
 
     <fragment
@@ -106,6 +146,15 @@
             android:name="date"
             app:argType="string"
             android:defaultValue="default"/>
+        <action
+            android:id="@+id/action_fragment_history2_to_fragment_payment"
+            app:destination="@id/fragment_payment" />
+        <action
+            android:id="@+id/action_fragment_history2_to_fragment_changeinfo"
+            app:destination="@id/fragment_changeinfo" />
+        <action
+            android:id="@+id/action_fragment_history2_to_fragment_inquiry"
+            app:destination="@id/fragment_inquiry" />
     </fragment>
 
     <fragment
@@ -142,4 +191,62 @@
         android:label="Feedback"
         android:name="com.example.momflavortw.ui.notifications.feedback.FeedbackFragment"
         tools:layout="@layout/fragment_feedback"/>
+
+    <fragment
+        android:id="@+id/fragment_payment"
+        android:label="Payment"
+        android:name="com.example.momflavortw.ui.notifications.history.PaymentFragment"
+        tools:layout="@layout/fragment_payment">
+        <action
+            android:id="@+id/action_fragment_payment_to_fragment_history2"
+            app:destination="@id/fragment_history2" />
+        <argument
+            android:name="date"
+            app:argType="string"
+            android:defaultValue="default" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_changeinfo"
+        android:label="ChangeInfo"
+        android:name="com.example.momflavortw.ui.notifications.history.ChangeInfoFragment"
+        tools:layout="@layout/fragment_changeinfo">
+        <action
+            android:id="@+id/action_fragment_changeinfo_to_fragment_history2"
+            app:destination="@id/fragment_history2" />
+        <argument
+            android:name="date"
+            app:argType="string"
+            android:defaultValue="default" />
+        <argument
+            android:name="name"
+            app:argType="string"
+            android:defaultValue="default" />
+        <argument
+            android:name="phone"
+            app:argType="string"
+            android:defaultValue="default" />
+        <argument
+            android:name="email"
+            app:argType="string"
+            android:defaultValue="default" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_inquiry"
+        android:label="Inquiry"
+        android:name="com.example.momflavortw.ui.notifications.history.InquiryFragment"
+        tools:layout="@layout/fragment_inquiry"
+        >
+        <action
+            android:id="@+id/action_fragment_inquiry_to_fragment_history2"
+            app:destination="@id/fragment_history2" />
+        <argument
+            android:name="date"
+            app:argType="string"
+            android:defaultValue="default" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragment_chat"
+        android:name="com.example.momflavortw.ui.chat.ChatFragment"
+        tools:layout="@layout/fragment_chat"/>
 </navigation>

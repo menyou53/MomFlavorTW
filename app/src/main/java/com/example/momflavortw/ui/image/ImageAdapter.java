@@ -2,7 +2,6 @@ package com.example.momflavortw.ui.image;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +48,8 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
         final Upload uploadCurrent = mUploads.get(position);
         holder.textViewName.setText(uploadCurrent.getName());
+        holder.textPrice.setText(uploadCurrent.getPrice()+"元");
+
         Picasso.get()
                 .load(uploadCurrent.getImageUrl())
                 .fit()
@@ -57,10 +58,14 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("getName",  "name =>"+uploadCurrent.getName()  );
                 final NavController navController = Navigation.findNavController(v);
                 Bundle bundle = new Bundle();
-                bundle.putString("name",uploadCurrent.getName());
+                bundle.putString("product",uploadCurrent.getProduct());
+                bundle.putInt("stock",uploadCurrent.getStock());
+                bundle.putInt("price",uploadCurrent.getPrice());
+                bundle.putString("imageUrl",uploadCurrent.getImageUrl());
+                bundle.putString("videoUrl",uploadCurrent.getVideoUrl());
+                bundle.putInt("markup",uploadCurrent.getMarkup());
                 navController.navigate(R.id.action_fragment_image_to_fragment_product,bundle);
 
             }
@@ -80,7 +85,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
 
     public class ImageViewHolder extends RecyclerView.ViewHolder{
-        public TextView textViewName;
+        public TextView textViewName, textPrice;
         public ImageView imageView;
         public CardView cardView;
 
@@ -88,6 +93,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
         public ImageViewHolder(View itemView) {
             super(itemView);
             textViewName = itemView.findViewById(R.id.text_view_name);
+            textPrice = itemView.findViewById(R.id.text_view_price);
             imageView = itemView.findViewById(R.id.image_view_upload);
             cardView = itemView.findViewById(R.id.cardview);
         }

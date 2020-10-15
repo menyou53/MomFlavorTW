@@ -6,17 +6,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.momflavortw.MainActivity;
 import com.example.momflavortw.R;
+import com.example.momflavortw.ui.image.Upload;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -57,6 +61,21 @@ class CartAdapter extends RecyclerView.Adapter<CartAdapter.ImageViewHolder> impl
         holder.textViewName.setText(cartCurrent.getName());
         holder.textViewNum.setText(String.valueOf(cartCurrent.getNum()));
         holder.textCartPrice.setText(String.valueOf(cartCurrent.getPriceCount()));
+        final int[] stock = new int[mCarts.size()];
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference reference = db.collection("products").document(cartCurrent.getProduct());
+        reference
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                             Upload upload = document.toObject(Upload.class);
+                             stock[position] = upload.getStock();
+                        }
+                    }
+                });
         count= Integer.parseInt((String) holder.textViewNum.getText());
         if(count==1){
             holder.minusImg.setImageResource(R.drawable.ic_baseline_delete_24);
@@ -87,10 +106,6 @@ class CartAdapter extends RecyclerView.Adapter<CartAdapter.ImageViewHolder> impl
                         FirebaseFirestore db = FirebaseFirestore.getInstance();
                         db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("total").document("total")
                                 .update("sum", FieldValue.increment(-cartCurrent.getNum()));
-                        Map<String,Object> delete = new HashMap<>();
-                        delete.put(cartCurrent.getName(),FieldValue.delete());
-                        db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("total").document("total")
-                                .update(delete);
                         db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("cart").document(cartCurrent.getName())
                                 .delete();
 
@@ -112,17 +127,20 @@ class CartAdapter extends RecyclerView.Adapter<CartAdapter.ImageViewHolder> impl
             public void onClick(View v) {
                 int count= Integer.parseInt((String) holder.textViewNum.getText());
                 //Integer.parseInt(String.valueOf(cartCurrent.getNum())) ;
-                if(count < 100 && count > 1){
+                if(count < stock[position] && count > 1){
                     count++;
                     cartCurrent.setmPriceCount(cartCurrent.getPrice()*count);
                     holder.textViewNum.setText(String.valueOf(count));
                     holder.textCartPrice.setText(String.valueOf(cartCurrent.getPriceCount()));
-                }else if(count == 1){
+                }else if(count == 1 && count < stock[position]){
                     holder.minusImg.setImageResource(R.drawable.ic_baseline_remove_circle_outline_24);
                     count++;
                     cartCurrent.setmPriceCount(cartCurrent.getPrice()*count);
                     holder.textViewNum.setText(String.valueOf(count));
                     holder.textCartPrice.setText(String.valueOf(cartCurrent.getPriceCount()));
+                }
+                if(count >= stock[position]){
+                    Toast.makeText(v.getContext(),"現在庫存為"+stock[position],Toast.LENGTH_SHORT).show();
                 }
 
             }

@@ -101,7 +101,7 @@ public class FeedbackFragment extends Fragment {
         builder.setMessage("Thx");
         AlertDialog dialog = builder.create();
         dialog.show();
-       handler.postDelayed(rToHome, 500);
+        handler.postDelayed(rToHome, 500);
 
    }
 
