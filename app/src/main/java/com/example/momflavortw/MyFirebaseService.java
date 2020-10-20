@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
-import io.kommunicate.Kommunicate;
 
 import static android.content.ContentValues.TAG;
 
@@ -29,9 +28,6 @@ public class MyFirebaseService extends FirebaseMessagingService {
         }
         if(remoteMessage.getNotification() != null){
             Log.d(TAG,"Message Notification Body: " + remoteMessage.getNotification().getBody());
-        }
-        if (Kommunicate.isKmNotification(this, remoteMessage.getData())) {
-            return;
         }
     }
 

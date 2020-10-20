@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.momflavortw.R;
 import com.example.momflavortw.ui.cart.CartCount;
+import com.example.momflavortw.ui.image.Upload;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.badge.BadgeDrawable;
@@ -69,6 +70,10 @@ public class ProductFragment extends Fragment {
     private ChoiceAdapter mAdapter;
     private int markup = 0;
     private int[] markPrice ;
+    private int checkMarkCount = 0;
+    private int[] checkedMarkPrice;
+    private String[] checkedMarkName;
+    private boolean[] checkedMark;
 
 
 
@@ -95,8 +100,7 @@ public class ProductFragment extends Fragment {
         if(getArguments()!=null) {
             product = getArguments().getString("product");
             name = product;
-            stock = getArguments().getInt("stock");
-            price = getArguments().getInt("price");
+            //price = getArguments().getInt("price");
             imageUrl = getArguments().getString("imageUrl");
             videoUrl = getArguments().getString("videoUrl");
             markup = getArguments().getInt("markup");
@@ -121,6 +125,7 @@ public class ProductFragment extends Fragment {
                                             @Override
                                             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                                                 if(cb.isChecked()){
+
                                                     price = price+markPrice[markupNum];
                                                     name = name+markupName;
                                                 }else {
@@ -136,7 +141,6 @@ public class ProductFragment extends Fragment {
                                 }
                             }
                         });
-
             }
             Log.d("name = ", product);
             Log.d("stock = ", valueOf(stock));
@@ -161,7 +165,7 @@ public class ProductFragment extends Fragment {
             }
         };
 
-
+/*
         if(stock <= 0){
             spinner.setVisibility(View.GONE);
             textStock.setVisibility(View.VISIBLE);
@@ -174,7 +178,7 @@ public class ProductFragment extends Fragment {
             ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, items);
             spinner.setAdapter(spinnerAdapter);
         }
-
+*/
 
         sliderView = root.findViewById(R.id.imageSlider);
         mSliders = new ArrayList<>();
@@ -193,7 +197,7 @@ public class ProductFragment extends Fragment {
         final TextView TextNarrative = root.findViewById(R.id.textNarrative);
         final ConstraintLayout constraintVideo = root.findViewById(R.id.constraintVideo);
         webView = root.findViewById(R.id.product_webView);
-        textprice.setText(valueOf(price)+"元");
+       // textprice.setText(valueOf(price)+"元");
         textProductTitle.setText(product);
 
         if(videoUrl.equals("")){
@@ -266,6 +270,34 @@ public class ProductFragment extends Fragment {
             }
         });
 
+        db.collection("products").document(product)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Upload upload = document.toObject(Upload.class);
+                            price = upload.getPrice();
+                            textprice.setText(valueOf(price)+"元");
+                            stock = upload.getStock();
+                            if(stock <= 0){
+                                spinner.setVisibility(View.GONE);
+                                textStock.setVisibility(View.VISIBLE);
+                            }else {
+                                spinner = root.findViewById(R.id.spinner);
+                                ArrayList<String> items = new ArrayList<String>();
+                                for (int i = 1; i <= stock; i++) {
+                                    items.add("數量" + valueOf(i));
+                                }
+                                ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, items);
+                                spinner.setAdapter(spinnerAdapter);
+
+                            }
+                        }
+                    }
+                });
+
 
         db.collection("products").document(product).collection("narrative").document("narrative")
                 .get()
@@ -304,12 +336,13 @@ public class ProductFragment extends Fragment {
         cartdata.put("product",product);
         Log.d("choice",common.getChoiceItem());
 
-
         db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("total").document("total")
                 .set(data, SetOptions.merge());
 
         db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("cart").document(name+" "+choice)
                 .set(cartdata, SetOptions.merge());
+
+
     }
 
     public void renewNotification(){

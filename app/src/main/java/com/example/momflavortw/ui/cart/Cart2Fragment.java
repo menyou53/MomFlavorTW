@@ -38,10 +38,17 @@ public class Cart2Fragment extends Fragment {
     private RecyclerView mRycyclerview;
     private Cart2Adapter mAdapter;
     private List<Cart> mCart;
+    private RecyclerView mRecyclerview2;
+    private Extragoods2Adapter mAdapter2;
     private TextView textTotal,textPayment;
     private Spinner spinner;
     private int total,payment,shipping;
-    private String adress;
+    private String address;
+    private int extra;
+    private String[] extraName;
+    private String[] extraImageUrl;
+    private int[] extraPrice;
+    private int[] extraNum;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -51,6 +58,32 @@ public class Cart2Fragment extends Fragment {
 
          textTotal = root.findViewById(R.id.text_total);
 
+         ArrayList<Extragoods2> extragoodsArrayList= new ArrayList<>();
+
+         if(getArguments()!=null) {
+            extra = getArguments().getInt("extra");
+            extraNum = getArguments().getIntArray("extraNum");
+            extraPrice = getArguments().getIntArray("extraPrice");
+            extraName = getArguments().getStringArray("extraName");
+            extraImageUrl = getArguments().getStringArray("extraImageUrl");
+
+            for(int i=1;i<=extra;i++){
+                if(extraNum[i-1]>0){
+                    extragoodsArrayList.add(new Extragoods2(extraImageUrl[i-1],extraName[i-1],extraPrice[i-1],extraNum[i-1]));
+                    total = total+extraNum[i-1]*extraPrice[i-1];
+                }
+            }
+            mRecyclerview2 = root.findViewById(R.id.recycler_view_cart2_extra);
+            mRecyclerview2.setHasFixedSize(true);
+            mRecyclerview2.setLayoutManager(new LinearLayoutManager(getActivity()));
+            mRecyclerview2.setLayoutManager(new GridLayoutManager(getActivity(), 1));
+            mAdapter2 =new Extragoods2Adapter(extragoodsArrayList);
+            mRecyclerview2.setAdapter(mAdapter2);
+
+
+
+
+        }
 
 
         mRycyclerview = root.findViewById(R.id.recycler_view_cart2);
@@ -70,7 +103,7 @@ public class Cart2Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(spinner.getSelectedItemPosition()==0) {
-                    textPayment.setText("面交地址為"+adress+"\n\n"+"匯款後請至訂單歷史輸入匯款資訊");
+                    textPayment.setText(address+"\n\n"+"匯款後請至訂單歷史輸入匯款資訊");
                 }else if(spinner.getSelectedItemPosition()==1){
                     textPayment.setText("匯款後請至訂單歷史輸入匯款資訊及宅配地址");
                 }
@@ -80,7 +113,7 @@ public class Cart2Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(spinner.getSelectedItemPosition()==0){
-                    textPayment.setText("面交地址為"+adress);
+                    textPayment.setText(address);
                 }else if(spinner.getSelectedItemPosition()==1){
                     textPayment.setText("匯款後請至訂單歷史輸入宅配地址");
 
@@ -99,7 +132,7 @@ public class Cart2Fragment extends Fragment {
                     textTotal.setText(String.valueOf(total));
                     radioButton1.setVisibility(View.VISIBLE);
                     radioButton.setChecked(true);
-                    textPayment.setText("面交地址為"+adress+"\n\n"+"匯款後請至訂單歷史輸入匯款資訊");
+                    textPayment.setText(address+"\n\n"+"匯款後請至訂單歷史輸入匯款資訊");
                 }else {
                     textTotal.setText(String.valueOf(total+shipping));
                     radioButton1.setVisibility(View.INVISIBLE);
@@ -128,13 +161,13 @@ public class Cart2Fragment extends Fragment {
                         if (document.exists()) {
 
                             Cart cart = document.toObject(Cart.class);
-                            total = cart.getTotal();
+                            total = total+cart.getTotal();
                             textTotal.setText(String.valueOf(total));
                         }
                     }
                 });
 
-        db.collection("Contact").document("Adress")
+        db.collection("Contact").document("contact")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -142,8 +175,8 @@ public class Cart2Fragment extends Fragment {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
                             Contact contact = document.toObject(Contact.class);
-                            adress = contact.getAdress();
-                            textPayment.setText("面交地址為"+adress+"\n\n"+"匯款後請至訂單歷史輸入匯款資訊");
+                            address = contact.getAddress().replace("NN","\n");
+                            textPayment.setText("面交地址為"+address.replace("NN","\n")+"\n\n"+"匯款後請至訂單歷史輸入匯款資訊");
 
                         }
                     }
@@ -204,6 +237,11 @@ public class Cart2Fragment extends Fragment {
                     bundle.putInt("shipping",shipping);
                 }
                 bundle.putInt("payment",payment);
+                bundle.putInt("extra",extra);
+                bundle.putIntArray("extraNum",extraNum);
+                bundle.putIntArray("extraPrice",extraPrice);
+                bundle.putStringArray("extraName",extraName);
+                bundle.putStringArray("extraImageUrl",extraImageUrl);
                 navController.navigate(R.id.action_fragment_cart2_to_fragment_cart3,bundle);
             }
         });

@@ -159,10 +159,12 @@
 
             <Button
                 android:id="@+id/buttonSendInfo"
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginTop="16dp"
-                android:text="Enter"
+                android:textStyle="bold"
+                android:text="確認購買"
                 app:layout_constraintTop_toBottomOf="@+id/cart3_paymentText" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -61,7 +61,6 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
                 final NavController navController = Navigation.findNavController(v);
                 Bundle bundle = new Bundle();
                 bundle.putString("product",uploadCurrent.getProduct());
-                bundle.putInt("stock",uploadCurrent.getStock());
                 bundle.putInt("price",uploadCurrent.getPrice());
                 bundle.putString("imageUrl",uploadCurrent.getImageUrl());
                 bundle.putString("videoUrl",uploadCurrent.getVideoUrl());

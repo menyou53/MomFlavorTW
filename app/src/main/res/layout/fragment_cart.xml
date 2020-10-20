@@ -8,6 +8,63 @@
     android:paddingBottom="?attr/actionBarSize"
     >
 
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ConstraintLayoutCart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:orientation="vertical"
+                android:background="@color/gray"
+                app:layout_constraintBottom_toTopOf="@+id/circularRevealRelativeLayoutMark"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/circularRevealRelativeLayout"></LinearLayout>
+
+            <com.google.android.material.circularreveal.CircularRevealRelativeLayout
+
+                android:id="@+id/circularRevealRelativeLayoutMark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                app:layout_constraintTop_toBottomOf="@+id/circularRevealRelativeLayout"
+                tools:context=".ui.image.ImagesFragment">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view_cart_Mark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="50dp" >
+
+                </androidx.recyclerview.widget.RecyclerView>
+            </com.google.android.material.circularreveal.CircularRevealRelativeLayout>
+
+            <com.google.android.material.circularreveal.CircularRevealRelativeLayout
+
+                android:id="@+id/circularRevealRelativeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:context=".ui.image.ImagesFragment">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view_cart"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                     />
+            </com.google.android.material.circularreveal.CircularRevealRelativeLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
     <TextView
         android:id="@+id/textCart"
         android:layout_width="wrap_content"
@@ -18,47 +75,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/ConstraintLayoutCart"
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="invisible">
-        <com.google.android.material.circularreveal.CircularRevealRelativeLayout
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="@+id/scrollView2"
+        app:layout_constraintStart_toStartOf="parent">
 
-            android:id="@+id/circularRevealRelativeLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:context=".ui.image.ImagesFragment">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view_cart"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="50dp"/>
-        </com.google.android.material.circularreveal.CircularRevealRelativeLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/circularRevealRelativeLayout"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <Button
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:id="@+id/Checkout"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="確認"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent" />
+        <Button
+            android:id="@+id/Checkout"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="確認"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

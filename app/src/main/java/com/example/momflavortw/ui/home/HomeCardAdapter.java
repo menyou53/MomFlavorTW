@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.momflavortw.R;
+import com.example.momflavortw.ui.image.Upload;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -21,7 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class HomeCardAdapter extends RecyclerView.Adapter<HomeCardAdapter.ImageViewHolder>  {
 
     private Context mContext;
-    private List<com.example.momflavortw.ui.home.Upload> mUploads;
+    private List<com.example.momflavortw.ui.image.Upload> mUploads;
 
     public HomeCardAdapter(Context context,List<Upload> uploads){
         mContext = context;
@@ -39,7 +40,7 @@ public class HomeCardAdapter extends RecyclerView.Adapter<HomeCardAdapter.ImageV
 
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
-        final com.example.momflavortw.ui.home.Upload uploadCurrent = mUploads.get(position);
+        final com.example.momflavortw.ui.image.Upload uploadCurrent = mUploads.get(position);
         holder.textViewName.setText(uploadCurrent.getName());
         Picasso.get()
                 .load(uploadCurrent.getImageUrl())
@@ -50,7 +51,10 @@ public class HomeCardAdapter extends RecyclerView.Adapter<HomeCardAdapter.ImageV
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putString("name",uploadCurrent.getProduct());
+                bundle.putString("product",uploadCurrent.getProduct());
+                bundle.putString("imageUrl",uploadCurrent.getImageUrl());
+                bundle.putString("videoUrl",uploadCurrent.getVideoUrl());
+                bundle.putInt("markup",uploadCurrent.getMarkup());
                 Navigation.findNavController(v).navigate(R.id.action_navigation_home_to_fragment_product, bundle);
 
             }

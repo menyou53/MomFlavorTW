@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.example.momflavortw.data.NoticeCount;
 import com.example.momflavortw.databinding.ActivityMainBinding;
@@ -15,6 +16,7 @@ import com.example.momflavortw.ui.home.HomeFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.badge.BadgeDrawable;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -26,15 +28,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import io.kommunicate.Kommunicate;
 
 import static android.content.ContentValues.TAG;
 
@@ -44,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     int notRead = 0;
     FirebaseFirestore db;
     CollectionReference ref;
+
+
 
     ActivityMainBinding binding;
     NavController navController;
@@ -70,6 +75,19 @@ public class MainActivity extends AppCompatActivity {
             setBadgeNotice();
         }
 
+        final BottomNavigationView navBar =  findViewById(R.id.nav_view);
+        navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
+            @Override
+            public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
+                if(destination.getId() == R.id.fragment_message) {
+                    navBar.setVisibility(View.GONE);
+                } else {
+                    navBar.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                     @Override
@@ -86,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
                         data.put("token",token);
                         db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail())
                                 .update(data);
-                        Kommunicate.updateDeviceToken(getApplicationContext(), token);
 
 
                         // Log and toast
@@ -200,6 +217,7 @@ public class MainActivity extends AppCompatActivity {
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
         managerCompat.notify(999,builder.build());
     }
+
 
 
 }

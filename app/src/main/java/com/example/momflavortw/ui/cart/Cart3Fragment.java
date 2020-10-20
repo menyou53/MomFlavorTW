@@ -50,6 +50,11 @@ public class Cart3Fragment extends Fragment {
     private int payment,total,shipping;
     private String paymentSt,ship;
     BadgeDrawable badge_dashboard;
+    private int extra;
+    private String[] extraName;
+    private String[] extraImageUrl;
+    private int[] extraPrice;
+    private int[] extraNum;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -75,6 +80,11 @@ public class Cart3Fragment extends Fragment {
         mCart = new ArrayList<>();
 
         if(getArguments() != null){
+            extra = getArguments().getInt("extra");
+            extraNum = getArguments().getIntArray("extraNum");
+            extraPrice = getArguments().getIntArray("extraPrice");
+            extraName = getArguments().getStringArray("extraName");
+            extraImageUrl = getArguments().getStringArray("extraImageUrl");
             shipping = getArguments().getInt("shipping");
             ship = getArguments().getString("ship");
             total = getArguments().getInt("total");
@@ -86,6 +96,7 @@ public class Cart3Fragment extends Fragment {
         }else if(payment == 2){
             paymentSt = "面交";
         }
+
 
 
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -237,6 +248,23 @@ public class Cart3Fragment extends Fragment {
                                             }
                                         }
                                     });
+
+                            Map<String,Object> extraData = new HashMap<>();
+                            for(int i=1;i<=extra;i++){
+                                if(extraNum[i-1]>0){
+                                    extraData.put("num",extraNum[i-1]);
+                                    extraData.put("price",extraPrice[i-1]);
+                                    extraData.put("name",extraName[i-1]);
+                                    extraData.put("date", rt);
+                                    extraData.put("product",extraName[i-1]);
+                                    extraData.put("imageUrl",extraImageUrl[i-1]);
+                                    db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("Purchased")
+                                            .add(extraData);
+                                    db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("history").document(rt).collection("historyCollection")
+                                            .add(extraData);
+
+                                }
+                            }
 
 
                             if (saveInfoBox.isChecked()) {

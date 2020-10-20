@@ -1,6 +1,7 @@
 package com.example.momflavortw.ui.home;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,12 +9,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.momflavortw.R;
+import com.example.momflavortw.ui.image.Upload;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class HomeCardAdapter2 extends RecyclerView.Adapter<HomeCardAdapter2.ImageViewHolder> {
@@ -28,6 +31,7 @@ public class HomeCardAdapter2 extends RecyclerView.Adapter<HomeCardAdapter2.Imag
     }
 
 
+
     @NonNull
     @Override
     public ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -36,13 +40,25 @@ public class HomeCardAdapter2 extends RecyclerView.Adapter<HomeCardAdapter2.Imag
 
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
-        final com.example.momflavortw.ui.home.Upload uploadCurrent = mUploads.get(position);
+        final com.example.momflavortw.ui.image.Upload uploadCurrent = mUploads.get(position);
         holder.textViewName.setText(uploadCurrent.getName());
         Picasso.get()
                 .load(uploadCurrent.getImageUrl())
                 .fit()
                 .centerCrop(20)
                 .into(holder.imageView);
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString("product",uploadCurrent.getProduct());
+                bundle.putString("imageUrl",uploadCurrent.getImageUrl());
+                bundle.putString("videoUrl",uploadCurrent.getVideoUrl());
+                bundle.putInt("markup",uploadCurrent.getMarkup());
+                Navigation.findNavController(v).navigate(R.id.action_navigation_home_to_fragment_product, bundle);
+
+            }
+        });
     }
 
     @Override

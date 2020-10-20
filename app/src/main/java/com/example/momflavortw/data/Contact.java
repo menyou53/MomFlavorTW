@@ -1,15 +1,17 @@
 package com.example.momflavortw.data;
 
 public class Contact {
-    private String mAdress;
+    private String mAddress;
     private int shipping;
+    private String remittance;
 
-    public String getAdress() {
-        return mAdress;
+
+    public String getAddress() {
+        return mAddress;
     }
 
-    public void setAdress(String adress) {
-        mAdress = adress;
+    public void setAddress(String address) {
+        mAddress = address;
     }
 
     public int getShipping() {
@@ -18,5 +20,13 @@ public class Contact {
 
     public void setShipping(int shipping) {
         this.shipping = shipping;
+    }
+
+    public String getRemittance() {
+        return remittance;
+    }
+
+    public void setRemittance(String remittance) {
+        this.remittance = remittance;
     }
 }

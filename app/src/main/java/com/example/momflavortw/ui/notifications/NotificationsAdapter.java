@@ -2,6 +2,7 @@ package com.example.momflavortw.ui.notifications;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,10 +41,16 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     }
 
     @Override
-    public void onBindViewHolder(@NonNull NotificationsAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final NotificationsAdapter.ViewHolder holder, final int position) {
+
 
         String title = data.get(position);
         holder.textView.setText(title);
+
+        if(position==0&&title.equals("有新通知")) {
+            holder.textView.setTextColor(Color.RED);
+        }
+
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,10 +62,15 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                     navController.navigate(R.id.action_navigation_notifications_to_fragment_history);
                 }else if(position == 2){
                     navController.navigate(R.id.action_navigation_notifications_to_fragment_chat);
+                }else if(position ==3){
+                    navController.navigate(R.id.action_navigation_notifications_to_fragment_aboutus);
                 }
                 else if(position == 4) {
                     navController.navigate(R.id.action_navigation_notifications_to_fragment_feedback);
-                } else if(position == 6){
+                }else if(position ==5){
+                    navController.navigate(R.id.action_navigation_notifications_to_fragment_message);
+                }
+                else if(position == 6){
                     Log.d("position",String.valueOf(position));
                     FirebaseAuth.getInstance().signOut();
                     v.getContext().startActivity(new Intent(v.getContext(), Auth.class));

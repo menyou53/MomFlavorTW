@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.example.momflavortw.R;
+import com.example.momflavortw.ui.image.Upload;
 import com.example.momflavortw.ui.product.SliderAdapterExample;
 import com.example.momflavortw.ui.product.SliderItem;
 import com.example.momflavortw.ui.product.Sliders;

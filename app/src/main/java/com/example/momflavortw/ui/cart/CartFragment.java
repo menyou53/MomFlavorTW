@@ -43,10 +43,17 @@ public class CartFragment extends Fragment {
     private RecyclerView mRycyclerview;
     private CartAdapter mAdapter;
     private List<Cart> mCart;
+    private List<Extragoods> mExtragoods;
+    private ExtragoodsAdapter mAdapter2;
+    private RecyclerView mRecyclerView2;
     TextView textView;
     int total,sum;
     ConstraintLayout constraintLayout;
     BadgeDrawable badge_dashboard;
+    private String[] extraName;
+    private String[] extraImageUrl;
+    private int[] extraPrice;
+    private int[] extraNum;
 
 
     @Override
@@ -72,6 +79,14 @@ public class CartFragment extends Fragment {
         mCart = new ArrayList<>();
         mRycyclerview.setLayoutManager(new GridLayoutManager(getActivity(), 1));
         textView = root.findViewById(R.id.textCart);
+
+        mRecyclerView2 = root.findViewById(R.id.recycler_view_cart_Mark);
+        mRecyclerView2.setHasFixedSize(true);
+        mRecyclerView2.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView2.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mExtragoods = new ArrayList<>();
+        mRecyclerView2.setLayoutManager(new GridLayoutManager(getActivity(), 1));
+
 
         renewNotification();
 
@@ -124,18 +139,75 @@ public class CartFragment extends Fragment {
                         }
                     }
                 });
+        db.collection("ExtraGoods")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            for(QueryDocumentSnapshot document : task.getResult()){
+                                Log.d("TAG", document.getId() + "=>" + document.getData());
+
+                                Extragoods extragoods = document.toObject(Extragoods.class);
+                                mExtragoods.add(extragoods);
+                            }
+                            mAdapter2 = new ExtragoodsAdapter(getActivity(),mExtragoods);
+                            mRecyclerView2.setAdapter(mAdapter2);
+                        }else{
+                            Log.w("TAG", "Error getting documents.", task.getException());
+                        }
+                    }
+                });
+
 
         final Button checkout=root.findViewById(R.id.Checkout);
         checkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                extraNum = new int [mAdapter2.getItemCount()];
+                extraPrice = new int [mAdapter2.getItemCount()];
+                extraImageUrl = new String[mAdapter2.getItemCount()];
+                extraName =  new String[mAdapter2.getItemCount()];
+                for(int i = 1; i<=mAdapter2.getItemCount(); i ++){
+                    TextView textName = ((TextView) mRecyclerView2.findViewHolderForAdapterPosition(i-1)
+                            .itemView.findViewById(R.id.product_name_extragoods));
+                    String name = textName.getText().toString();
+                    extraName[i-1]=name;
+
+                    int num = 0;
+                    TextView textNum = ((TextView) mRecyclerView2.findViewHolderForAdapterPosition(i-1)
+                            .itemView.findViewById(R.id.product_count_extragoods));
+                    num = Integer.parseInt(textNum.getText().toString());
+                    extraNum[i-1]=num;
+
+                    int price = 0;
+                    TextView textPrice = (mRecyclerView2.findViewHolderForAdapterPosition(i-1)
+                            .itemView.findViewById(R.id.cart_price_extragoods));
+                    price = Integer.parseInt(textPrice.getText().toString());
+                    if(num>0) {
+                        extraPrice[i - 1] = price / num;
+                    }
+
+                    TextView textImageUrl = (mRecyclerView2.findViewHolderForAdapterPosition(i-1)
+                            .itemView.findViewById(R.id.imageUrlExtraGoods));
+                    String imageUrl = textImageUrl.getText().toString();
+                    extraImageUrl[i-1] = imageUrl;
+
+
+                }
+                Bundle bundle = new Bundle();
+                bundle.putIntArray("extraNum",extraNum);
+                bundle.putIntArray("extraPrice",extraPrice);
+                bundle.putStringArray("extraName",extraName);
+                bundle.putStringArray("extraImageUrl",extraImageUrl);
+                bundle.putInt("extra",mAdapter2.getItemCount());
 
                 setTotal();
                 checkout();
                 renewNotification();
 
                 final NavController navController = Navigation.findNavController(root);
-                navController.navigate(R.id.action_navigation_cart_to_fragment_cart2);
+                navController.navigate(R.id.action_navigation_cart_to_fragment_cart2,bundle);
 
             }
         });
@@ -150,6 +222,15 @@ public class CartFragment extends Fragment {
                     .itemView.findViewById(R.id.text_cart_price));
             total = total + Integer.parseInt(text.getText().toString());
         }
+        /*
+        for(int i = 0; i < mAdapter2.getItemCount(); i ++){
+            TextView text = (mRecyclerView2.findViewHolderForAdapterPosition(i)
+                    .itemView.findViewById(R.id.cart_price_extragoods));
+            TextView textNum = ((TextView) mRecyclerView2.findViewHolderForAdapterPosition(i)
+                    .itemView.findViewById(R.id.product_count_extragoods));
+            int num = 0;
+            num = Integer.parseInt(textNum.getText().toString());
+        }*/
         Map<String, Object> checkdata = new HashMap<>();
         checkdata.put("total",total);
         db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("total").document("checked")
@@ -179,6 +260,8 @@ public class CartFragment extends Fragment {
             db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("total").document("total")
                     .update(checkdata);
         }
+
+
         Map<String, Object> totaldata = new HashMap<>();
         totaldata.put("sum",sum);
         db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("total").document("total")

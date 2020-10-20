@@ -31,7 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class NoticeFragment extends Fragment {
 
-    private RecyclerView mRycyclerview;
+    private RecyclerView mRecyclerview;
     private List<Notice> mNotice;
     private NoticeAdapter mAdapter;
     private TextView textView ;
@@ -45,11 +45,11 @@ public class NoticeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.fragment_notice, container, false);
 
-        mRycyclerview = root.findViewById(R.id.recycler_view_notice);
-        mRycyclerview.setHasFixedSize(true);
-        mRycyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerview = root.findViewById(R.id.recycler_view_notice);
+        mRecyclerview.setHasFixedSize(true);
+        mRecyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         mNotice = new ArrayList<>();
-        mRycyclerview.setLayoutManager(new GridLayoutManager(getActivity(), 1));
+        mRecyclerview.setLayoutManager(new GridLayoutManager(getActivity(), 1));
         textView = root.findViewById(R.id.textViewNoNotice);
 
         new Thread(new Runnable(){
@@ -106,7 +106,7 @@ public class NoticeFragment extends Fragment {
                                 mNotice.add(notice);
                             }
                             mAdapter = new NoticeAdapter(getActivity(),mNotice);
-                            mRycyclerview.setAdapter(mAdapter);
+                            mRecyclerview.setAdapter(mAdapter);
 
                         }else{
                             Log.w("TAG", "Error getting documents.", task.getException());
