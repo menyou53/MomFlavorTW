@@ -7,7 +7,6 @@
   
 ## Home
 
-<img src="Screenshots/home.png" alt="Cover" width="30%"/>
 <br>
 
 ## Product
