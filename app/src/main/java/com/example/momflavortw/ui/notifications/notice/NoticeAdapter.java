@@ -44,7 +44,7 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ImageViewH
             holder.textContent.setTextColor(Color.BLACK);
         }
         holder.textTitle.setText(notice.getTitle());
-        holder.textContent.setText(notice.getContent());
+        holder.textContent.setText(notice.getContent().replace("*NN","\n"));
         holder.textDate.setText(notice.getDate().substring(0,4)+"年"+notice.getDate().substring(5,7)+"月"+notice.getDate().substring(8,10)+"日");
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,7 +52,7 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ImageViewH
                 Bundle bundle = new Bundle();
                 bundle.putString("date",notice.getDate());
                 bundle.putString("title",notice.getTitle());
-                bundle.putString("content",notice.getContent());
+                bundle.putString("content",notice.getContent().replace("*NN","\n"));
                 Navigation.findNavController(v).navigate(R.id.action_fragment_notice_to_fragment_notice2,bundle);
             }
         });

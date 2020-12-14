@@ -60,9 +60,11 @@ public class PaymentFragment extends Fragment {
         Bundle args = getArguments();
         if(getArguments()!=null) {
             date = args.getString("date");
+
             Log.d("date = ",date );
         }
 
+        editAdress.setHint("若面交自取 請輸入自取");
 
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -70,6 +72,8 @@ public class PaymentFragment extends Fragment {
         final String rt = sdf.format(calendar.getTime());
         cDate = rt.substring(5,7)+"月"+rt.substring(8,10)+"日";
         textCalender.setText(cDate);
+
+
 
         constraintLayoutChoose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,6 +89,8 @@ public class PaymentFragment extends Fragment {
                 }
             }
         });
+
+
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
@@ -152,6 +158,7 @@ public class PaymentFragment extends Fragment {
                     deliveryData.put("address",editAdress.getText().toString());
                     InfoData.put("payed",1);
                     InfoData.put("status","已匯款");
+                    InfoData.put("changeable",0);
                     paymentData.put("account",editAccountNum.getText().toString());
                     paymentData.put("payDate",cDate);
                     paymentData.put("picker",editPicker.getText().toString());

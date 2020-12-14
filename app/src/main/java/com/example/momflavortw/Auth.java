@@ -7,9 +7,12 @@ import android.view.View;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -40,15 +43,14 @@ public class Auth extends AppCompatActivity {
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
                 new AuthUI.IdpConfig.GoogleBuilder().build(),
-                new AuthUI.IdpConfig.FacebookBuilder().build(),
-                new AuthUI.IdpConfig.PhoneBuilder().build()
+                new AuthUI.IdpConfig.FacebookBuilder().build()
         );
 
         Intent intent = AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
-                .setTosAndPrivacyPolicyUrls("https://example.com", "https://example.com")
-                .setLogo(R.drawable.ic_baseline_android_24)
+               // .setTosAndPrivacyPolicyUrls("https://example.com", "https://example.com")
+                //.setLogo(R.mipmap.ic_launcher_round)
                 .setAlwaysShowSignInMethodScreen(true)
                 .setIsSmartLockEnabled(false)
                 .build();
@@ -90,9 +92,26 @@ public class Auth extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         if(user!=null){
-            String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-
             FirebaseFirestore db = FirebaseFirestore.getInstance();
+            FirebaseAuth.getInstance().getCurrentUser().getIdToken(true).addOnSuccessListener(new OnSuccessListener<GetTokenResult>() {
+                @Override
+                public void onSuccess(GetTokenResult getTokenResult) {
+                    String token_id = getTokenResult.getToken();
+                    String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    Map<String, Object> token = new HashMap<>();
+                    token.put("uid",uid);
+                    token.put("token_id",token_id);
+                    token.put("email",FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                    token.put("name",FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    db.collection("message").document(uid)
+                            .set(token, SetOptions.merge());
+                }
+            });
+
+
+
+            String userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
             Map<String, Object> data = new HashMap<>();
             data.put("Email", userEmail);
             db.collection("User").document(userEmail)

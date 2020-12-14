@@ -133,6 +133,7 @@ public class History2Fragment extends Fragment {
                             public void onClick(View v) {
                                 Bundle bundle = new Bundle();
                                 bundle.putString("date",date);
+
                                 Navigation.findNavController(v).navigate(R.id.action_fragment_history2_to_fragment_payment,bundle);
                             }
                         });
@@ -185,6 +186,8 @@ public class History2Fragment extends Fragment {
                                 .set(Cancel, SetOptions.merge());
                         db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("history").document(date).collection("info").document("userInfo")
                                 .set(Cancel3,SetOptions.merge());
+                        db.collection("Order").document(date+"-"+FirebaseAuth.getInstance().getCurrentUser().getEmail())
+                                .update(Cancel3);
                         AlertDialog.Builder builder2 = new AlertDialog.Builder(getActivity());
                         builder2.setMessage("取消訂單已提出");
                         AlertDialog dialog2 = builder2.create();
@@ -200,9 +203,7 @@ public class History2Fragment extends Fragment {
         btnAsk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putString("date",date);
-                Navigation.findNavController(v).navigate(R.id.action_fragment_history2_to_fragment_inquiry,bundle);
+                Navigation.findNavController(v).navigate(R.id.action_fragment_history2_to_fragment_message);
             }
         });
 
@@ -298,8 +299,12 @@ public class History2Fragment extends Fragment {
                                 payment = userInfo.getPayment();
                                 payed = userInfo.getPayed();
                                 changeable = userInfo.getChangeable();
-                                shipText.setText(userInfo.getShip());
                                 shippingText.setText(String.valueOf(userInfo.getShipping())+"元");
+                                if(userInfo.getShip().equals("面交")){
+                                    shipText.setText(userInfo.getShip()+"   "+userInfo.getPickday());
+                                }else {
+                                    shipText.setText(userInfo.getShip());
+                                }
 
                                 Log.d(TAG,"payed= "+payed+"  payment="+payment);
 

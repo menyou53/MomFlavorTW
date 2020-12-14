@@ -419,7 +419,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/white"
-                        android:text="詢問中心"
+                        android:text="詢問客服"
                         android:textColor="@color/strong_orange"
                         android:textSize="16sp" />
                 </LinearLayout>

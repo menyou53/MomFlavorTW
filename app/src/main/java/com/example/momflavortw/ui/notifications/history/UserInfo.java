@@ -13,6 +13,7 @@ class UserInfo {
     private int changeable;
     private String ship;
     private int shipping;
+    private String pickday;
     public UserInfo(){
 
     }
@@ -111,5 +112,13 @@ class UserInfo {
 
     public void setShipping(int shipping) {
         this.shipping = shipping;
+    }
+
+    public String getPickday() {
+        return pickday;
+    }
+
+    public void setPickday(String pickday) {
+        this.pickday = pickday;
     }
 }

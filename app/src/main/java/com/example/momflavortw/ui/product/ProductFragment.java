@@ -1,5 +1,6 @@
 package com.example.momflavortw.ui.product;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.momflavortw.R;
+import com.example.momflavortw.data.Common;
 import com.example.momflavortw.ui.cart.CartCount;
 import com.example.momflavortw.ui.image.Upload;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -74,7 +76,7 @@ public class ProductFragment extends Fragment {
     private int[] checkedMarkPrice;
     private String[] checkedMarkName;
     private boolean[] checkedMark;
-
+    private String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
 
 
@@ -165,21 +167,8 @@ public class ProductFragment extends Fragment {
             }
         };
 
-/*
-        if(stock <= 0){
-            spinner.setVisibility(View.GONE);
-            textStock.setVisibility(View.VISIBLE);
-        }else {
-            spinner = root.findViewById(R.id.spinner);
-            ArrayList<String> items = new ArrayList<String>();
-            for (int i = 1; i <= stock; i++) {
-                items.add("數量" + valueOf(i));
-            }
-            ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_spinner_dropdown_item, items);
-            spinner.setAdapter(spinnerAdapter);
-        }
-*/
 
+        spinner = root.findViewById(R.id.spinner);
         sliderView = root.findViewById(R.id.imageSlider);
         mSliders = new ArrayList<>();
         adapter = new SliderAdapterExample(this.getActivity());
@@ -195,6 +184,7 @@ public class ProductFragment extends Fragment {
         final TextView textprice = root.findViewById(R.id.textPrice);
         final TextView textProductTitle = root.findViewById(R.id.textProductTitle);
         final TextView TextNarrative = root.findViewById(R.id.textNarrative);
+        final Button btn = root.findViewById(R.id.renewButton);
         final ConstraintLayout constraintVideo = root.findViewById(R.id.constraintVideo);
         webView = root.findViewById(R.id.product_webView);
        // textprice.setText(valueOf(price)+"元");
@@ -255,17 +245,29 @@ public class ProductFragment extends Fragment {
 
 
 
-        final Button btn = root.findViewById(R.id.renewButton);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addcart();
-                Context context = getContext();
-                Toast.makeText(context,"已加入購物車",Toast.LENGTH_LONG).show();
-                final NavController navController = Navigation.findNavController(v);
-                navController.navigate(R.id.action_fragment_product_to_navigation_cart);
-                //handler.postDelayed(renewCart, 500);
+                if(stock>0) {
+                    addcart();
+                    Context context = getContext();
+                    Toast.makeText(context, "已加入購物車", Toast.LENGTH_LONG).show();
+                    final NavController navController = Navigation.findNavController(v);
+                    navController.navigate(R.id.action_fragment_product_to_navigation_cart);
+                    //handler.postDelayed(renewCart, 500);
+                }else {
+                    Map<String ,Object> reservation = new HashMap<>();
+                    reservation.put("uid",uid);
+                    reservation.put("email",FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    db.collection("reservation").document("reservation").collection(product).document(uid)
+                            .set(reservation,SetOptions.merge());
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage("商品補貨時會向您通知");
 
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
 
             }
         });
@@ -284,8 +286,10 @@ public class ProductFragment extends Fragment {
                             if(stock <= 0){
                                 spinner.setVisibility(View.GONE);
                                 textStock.setVisibility(View.VISIBLE);
+                                btn.setText("補貨時通知");
                             }else {
-                                spinner = root.findViewById(R.id.spinner);
+                                btn.setText("加入購物車");
+                                //spinner = root.findViewById(R.id.spinner);
                                 ArrayList<String> items = new ArrayList<String>();
                                 for (int i = 1; i <= stock; i++) {
                                     items.add("數量" + valueOf(i));

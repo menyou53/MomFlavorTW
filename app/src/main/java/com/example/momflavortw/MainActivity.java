@@ -1,37 +1,32 @@
 package com.example.momflavortw;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.example.momflavortw.data.Common;
 import com.example.momflavortw.data.NoticeCount;
 import com.example.momflavortw.databinding.ActivityMainBinding;
 import com.example.momflavortw.ui.cart.CartCount;
 import com.example.momflavortw.ui.home.HomeFragment;
+import com.example.momflavortw.ui.notifications.message.LastMessage;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
@@ -45,9 +40,8 @@ public class MainActivity extends AppCompatActivity {
     int notice = 0;
     int sum = 0;
     int notRead = 0;
-    FirebaseFirestore db;
-    CollectionReference ref;
-
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    String uid = FirebaseAuth.getInstance().getUid();
 
 
     ActivityMainBinding binding;
@@ -60,59 +54,76 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home,R.id.navigation_image, R.id.navigation_cart, R.id.navigation_notifications)
+                R.id.navigation_home, R.id.navigation_image, R.id.navigation_cart, R.id.navigation_notifications)
                 .build();
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-        if( FirebaseAuth.getInstance().getCurrentUser() == null){
-            Intent intent = new Intent(this,Auth.class);
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            Intent intent = new Intent(this, Auth.class);
             startActivity(intent);
             finish();
-        }else {
+        } else {
             setBadge();
             setBadgeNotice();
         }
 
-        final BottomNavigationView navBar =  findViewById(R.id.nav_view);
+        final Common common = new Common();
+
+
+        final BottomNavigationView navBar = findViewById(R.id.nav_view);
         navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
             @Override
             public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
-                if(destination.getId() == R.id.fragment_message) {
+                if (destination.getId() == R.id.fragment_message || destination.getId() == R.id.fragment_messageimg) {
                     navBar.setVisibility(View.GONE);
+                    common.setMsgAlet(false);
                 } else {
                     navBar.setVisibility(View.VISIBLE);
+                    common.setMsgAlet(true);
                 }
             }
         });
 
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            final DocumentReference docRef = db.collection("message").document(uid);
+            docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                    @Nullable FirebaseFirestoreException e) {
+                    if (e != null) {
+                        Log.w(TAG, "Listen failed.", e);
+                        return;
+                    }
+                    String source = snapshot != null && snapshot.getMetadata().hasPendingWrites()
+                            ? "Local" : "Server";
 
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "getInstanceId failed", task.getException());
-                            return;
+                    if (snapshot != null && snapshot.exists()) {
+                        LastMessage lastMessage = snapshot.toObject(LastMessage.class);
+                        if (common.isMsgAlet() && lastMessage.getRead() == 0 && lastMessage.getFrom().equals(uid) == false && lastMessage.getFrom().equals("null") == false) {
+                            common.setNewMsg(true);
+                            //Toast.makeText(getApplicationContext(), "new message", Toast.LENGTH_SHORT).show();
+                            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                            builder.setMessage("有新的訊息");
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+
                         }
 
-                        // Get new Instance ID token
-                        String token = task.getResult().getToken();
-                        FirebaseFirestore db = FirebaseFirestore.getInstance();
-                        Map<String, Object> data = new HashMap<>();
-                        data.put("token",token);
-                        db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail())
-                                .update(data);
+                        Log.d(TAG, source + " data: " + snapshot.getData());
 
 
-                        // Log and toast
-                        Log.d(TAG, token);
-                        //Toast.makeText(MainActivity.this, token, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.d(TAG, source + " data: null");
                     }
-                });
+                }
+            });
 
+        }
     }
+
+
     @Override
     public boolean onSupportNavigateUp() {
         return navController.navigateUp() || super.onSupportNavigateUp();
@@ -202,22 +213,42 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
-    private void notification(){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            NotificationChannel channel =
-                    new NotificationChannel("n","n", NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(channel);
-        }
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"n")
-                .setContentText("Code Sphere")
-                .setSmallIcon(R.drawable.ic_notifications_black_24dp)
-                .setAutoCancel(true)
-                .setContentText("data is addded");
-        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(this);
-        managerCompat.notify(999,builder.build());
+
+
+    public void setBadgeMessage(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).collection("noticeCount").document("NoticeCount")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                NoticeCount noticecount = document.toObject(NoticeCount.class);
+                                notice = noticecount.getNotice();
+                                notRead = noticecount.getNotRead();
+                                Log.d(TAG, "notice =  " + notice);
+                                Log.d(TAG, "notRead =  " + notRead);
+                                BadgeDrawable badge_dashboard = binding.navView.getOrCreateBadge(R.id.navigation_notifications);
+                                if(notRead >0 ) {
+                                    badge_dashboard.setBackgroundColor(Color.RED);
+                                    badge_dashboard.setMaxCharacterCount(3);
+                                    badge_dashboard.setNumber(notRead);
+                                    badge_dashboard.setVisible(true);
+
+                                }else{
+                                    badge_dashboard.setVisible(false);
+                                }
+                            }else{
+                                Log.d(TAG, "notcie not exist");
+
+                            }
+                        }else {
+                            Log.d(TAG, "Cached get failed: ", task.getException());
+                        }
+                    }
+                });
     }
-
-
 
 }

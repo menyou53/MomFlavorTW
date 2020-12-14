@@ -20,13 +20,13 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_message"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:descendantFocusability="beforeDescendants"
             />
     </com.google.android.material.circularreveal.CircularRevealRelativeLayout>
 
     <LinearLayout
-        android:paddingLeft="48dp"
+        android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:id="@+id/form"
         android:layout_width="match_parent"
@@ -38,6 +38,16 @@
         android:paddingBottom="2dp" >
 
 
+        <ImageButton
+            android:id="@+id/btnChooseImg"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:background="@color/white"
+            android:layout_marginLeft="10dp"
+            app:srcCompat="@drawable/ic_baseline_image_24" />
+
         <EditText
             android:id="@+id/etMessage"
             android:layout_width="wrap_content"
@@ -46,7 +56,9 @@
             android:layout_alignParentLeft="true"
             android:layout_alignTop="@+id/button1"
             android:layout_toLeftOf="@+id/btnSendMsg"
-            android:layout_weight="0.72"
+            android:layout_weight="0.6"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:hint="輸入訊息"
             android:textSize="18sp"
             android:maxEms="10"
@@ -59,7 +71,6 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:background="@color/white"
-            android:layout_marginLeft="10dp"
             app:srcCompat="@drawable/ic_baseline_send_24" />
     </LinearLayout>
 

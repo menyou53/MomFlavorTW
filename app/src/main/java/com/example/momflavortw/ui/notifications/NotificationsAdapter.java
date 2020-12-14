@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.momflavortw.Auth;
 import com.example.momflavortw.R;
+import com.example.momflavortw.data.Common;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
@@ -43,14 +44,19 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     @Override
     public void onBindViewHolder(@NonNull final NotificationsAdapter.ViewHolder holder, final int position) {
 
+        final Common common = new Common();
+
 
         String title = data.get(position);
         holder.textView.setText(title);
 
         if(position==0&&title.equals("有新通知")) {
-            holder.textView.setTextColor(Color.RED);
+            holder.textView.setTextColor(Color.rgb(194,62,2));
         }
-
+        if(common.isNewMsg()&&position == 4){
+            holder.textView.setText("有新客服訊息");
+            holder.textView.setTextColor(Color.rgb(194,62,2));
+        }
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,17 +66,14 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
                     navController.navigate(R.id.action_navigation_notifications_to_fragment_notice);
                 }else if(position == 1) {
                     navController.navigate(R.id.action_navigation_notifications_to_fragment_history);
-                }else if(position == 2){
-                    navController.navigate(R.id.action_navigation_notifications_to_fragment_chat);
-                }else if(position ==3){
+                }else if(position ==2){
                     navController.navigate(R.id.action_navigation_notifications_to_fragment_aboutus);
                 }
-                else if(position == 4) {
+                else if(position == 3) {
                     navController.navigate(R.id.action_navigation_notifications_to_fragment_feedback);
-                }else if(position ==5){
+                }else if(position ==4){
                     navController.navigate(R.id.action_navigation_notifications_to_fragment_message);
-                }
-                else if(position == 6){
+                } else if(position == 5){
                     Log.d("position",String.valueOf(position));
                     FirebaseAuth.getInstance().signOut();
                     v.getContext().startActivity(new Intent(v.getContext(), Auth.class));
@@ -87,11 +90,9 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         CardView cardView;
-        //Button button;
         TextView textView;
         public ViewHolder(View itemView){
             super(itemView);
-            //button = itemView.findViewById(R.id.notificationButton);
             textView = itemView.findViewById(R.id.notification_text);
             cardView = itemView.findViewById(R.id.cardview_notification);
         }

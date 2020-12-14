@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.momflavortw.R;
+import com.example.momflavortw.data.Common;
 import com.example.momflavortw.ui.notifications.history.PaymentFragment;
 
 import java.util.List;

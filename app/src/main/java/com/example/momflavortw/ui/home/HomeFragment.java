@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.momflavortw.R;
 import com.example.momflavortw.ui.image.Upload;
@@ -16,6 +17,7 @@ import com.example.momflavortw.ui.product.SliderItem;
 import com.example.momflavortw.ui.product.Sliders;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -42,6 +44,8 @@ public class HomeFragment extends Fragment {
     SliderView sliderView;
     Handler handler = new Handler();
     Runnable setLayoutVisible;
+    private TextView home_title_1,home_title_2;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -59,6 +63,9 @@ public class HomeFragment extends Fragment {
         mUploads2 = new ArrayList<>();
         mRecyclerview2.setHasFixedSize(true);
         mRecyclerview2.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        home_title_1 = root.findViewById(R.id.home_title_1);
+        home_title_2 = root.findViewById(R.id.home_title_2);
+
 
         final ConstraintLayout constraintLayout = root.findViewById(R.id.constraintHome);
         final ProgressBar progressBar = root.findViewById(R.id.homeProgressBar);
@@ -102,7 +109,26 @@ public class HomeFragment extends Fragment {
     public void loadLayout(){
 
        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("home").document("product").collection("new_product")
+
+       db.collection("home").document("title")
+               .get()
+               .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                   @Override
+                   public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                       if (task.isSuccessful()) {
+                           DocumentSnapshot document = task.getResult();
+                           if (document.exists()) {
+                                HomeTitle homeTitle = document.toObject(HomeTitle.class);
+                                home_title_1.setText(homeTitle.getHome_title_1());
+                                home_title_2.setText(homeTitle.getHome_title_2());
+                           }
+                       }
+                   }
+               });
+
+
+
+        db.collection("home").document("product").collection("home_product_1")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -121,7 +147,7 @@ public class HomeFragment extends Fragment {
                         }
                     }
                 });
-        db.collection("home").document("product").collection("popular")
+        db.collection("home").document("product").collection("home_product_2")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -167,6 +193,8 @@ public class HomeFragment extends Fragment {
                         }
                     }
                 });
+
+
 
 
     }

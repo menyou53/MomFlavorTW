@@ -48,7 +48,7 @@ public class Cart3Fragment extends Fragment {
 
     private List<Cart> mCart;
     private int payment,total,shipping;
-    private String paymentSt,ship;
+    private String paymentSt,ship,pickday;
     BadgeDrawable badge_dashboard;
     private int extra;
     private String[] extraName;
@@ -89,6 +89,7 @@ public class Cart3Fragment extends Fragment {
             ship = getArguments().getString("ship");
             total = getArguments().getInt("total");
             payment = getArguments().getInt("payment");
+            pickday = getArguments().getString("pickday");
             Log.d(TAG,"payment= "+payment);
         }
         if(payment == 1) {
@@ -204,6 +205,7 @@ public class Cart3Fragment extends Fragment {
                             InfoData.put("payment",paymentSt);
                             InfoData.put("payed",0);
                             InfoData.put("ship",ship);
+                            InfoData.put("pickday",pickday);
                             InfoData.put("shipping",shipping);
                             if(payment == 1){
                                 InfoData.put("status","待匯款");
@@ -285,6 +287,8 @@ public class Cart3Fragment extends Fragment {
                             Orderdata.put("email",FirebaseAuth.getInstance().getCurrentUser().getEmail());
                             Orderdata.put("payment",paymentSt);
                             Orderdata.put("payed",0);
+                           // Orderdata.put("timestamp", new Timestamp(new Date()));
+
                             if(payment == 1){
                                 Orderdata.put("status","待匯款");
                             }else if(payment == 2){
@@ -302,7 +306,7 @@ public class Cart3Fragment extends Fragment {
 
 
                             AlertDialog.Builder builder2 = new AlertDialog.Builder(getActivity());
-                            builder2.setMessage("access");
+                            builder2.setMessage("購買成功");
                             builder2.setPositiveButton("確認", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {

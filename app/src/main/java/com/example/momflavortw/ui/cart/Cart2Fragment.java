@@ -22,10 +22,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -49,12 +54,15 @@ public class Cart2Fragment extends Fragment {
     private String[] extraImageUrl;
     private int[] extraPrice;
     private int[] extraNum;
+    private String sDay1,sDay2,sDay3,pickday;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         final View root = inflater.inflate(R.layout.fragment_cart2, container, false);
+        final ConstraintLayout constraintLayoutCalender = root.findViewById(R.id.cartconstraintCalender);
+        final TextView textViewCalendar = root.findViewById(R.id.textViewCalendar);
 
          textTotal = root.findViewById(R.id.text_total);
 
@@ -81,9 +89,38 @@ public class Cart2Fragment extends Fragment {
             mRecyclerview2.setAdapter(mAdapter2);
 
 
-
-
         }
+         final RadioButton radioDay1 = root.findViewById(R.id.radioButtonDay1);
+         final RadioButton radioDay2 = root.findViewById(R.id.radioButtonDay2);
+         final RadioButton radioDay3 = root.findViewById(R.id.radioButtonDay3);
+
+        Calendar calendar = Calendar.getInstance();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
+        sdf.setTimeZone(TimeZone.getTimeZone("Asia/Taipei"));
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        Date day1 = calendar.getTime();
+        sDay1 = sdf.format(day1).substring(0,2)+"月"+sdf.format(day1).substring(3,5)+"日";
+        radioDay1.setText(sDay1);
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        Date day2 = calendar.getTime();
+        sDay2 = sdf.format(day2).substring(0,2)+"月"+sdf.format(day2).substring(3,5)+"日";
+        radioDay2.setText(sDay2);
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        Date day3 = calendar.getTime();
+        sDay3 = sdf.format(day3).substring(0,2)+"月"+sdf.format(day3).substring(3,5)+"日";
+        radioDay3.setText(sDay3);
+
+        if(radioDay1.isChecked()){
+            pickday = sDay1;
+        }else if(radioDay2.isChecked()){
+            pickday = sDay2;
+        }else if (radioDay3.isChecked()){
+            pickday = sDay3;
+        }
+
+
+
 
 
         mRycyclerview = root.findViewById(R.id.recycler_view_cart2);
@@ -129,11 +166,13 @@ public class Cart2Fragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if(position == 0){
+                    constraintLayoutCalender.setVisibility(View.VISIBLE);
                     textTotal.setText(String.valueOf(total));
                     radioButton1.setVisibility(View.VISIBLE);
                     radioButton.setChecked(true);
                     textPayment.setText(address+"\n\n"+"匯款後請至訂單歷史輸入匯款資訊");
                 }else {
+                    constraintLayoutCalender.setVisibility(View.GONE);
                     textTotal.setText(String.valueOf(total+shipping));
                     radioButton1.setVisibility(View.INVISIBLE);
                     radioButton.setChecked(true);
@@ -231,10 +270,12 @@ public class Cart2Fragment extends Fragment {
                     bundle.putInt("total",total);
                     bundle.putString("ship","面交");
                     bundle.putInt("shipping",0);
+                    bundle.putString("pickday",pickday);
                 }else if(spinner.getSelectedItemPosition()==1){
                     bundle.putInt("total",total+shipping);
                     bundle.putString("ship","宅配");
                     bundle.putInt("shipping",shipping);
+                    bundle.putString("pickday","null");
                 }
                 bundle.putInt("payment",payment);
                 bundle.putInt("extra",extra);

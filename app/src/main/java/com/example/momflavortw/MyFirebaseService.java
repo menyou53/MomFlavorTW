@@ -23,6 +23,10 @@ public class MyFirebaseService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
+        String messageTitle = remoteMessage.getNotification().getTitle();
+        String messageBody = remoteMessage.getNotification().getBody();
+
+
         if(remoteMessage.getData().size() > 0){
             Log.d(TAG,"Message data payload: " + remoteMessage.getData());
         }
@@ -41,6 +45,8 @@ public class MyFirebaseService extends FirebaseMessagingService {
         Map<String, Object> data = new HashMap<>();
         data.put("token",token);
         db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getEmail())
+                .update(data);
+        db.collection("message").document(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .update(data);
     }
 }

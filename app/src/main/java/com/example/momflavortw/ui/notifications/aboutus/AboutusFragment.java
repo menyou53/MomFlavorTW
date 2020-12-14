@@ -73,12 +73,14 @@ public class AboutusFragment extends Fragment {
                 uiSettings.setAllGesturesEnabled(true);
                 uiSettings.setMapToolbarEnabled(true);
 
+
+
                 mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-                LatLng latLng = new LatLng(22.611706, 120.300347);
+                LatLng latLng = new LatLng(22.642124, 120.352018);
                 LatLng latLng1 = new LatLng(22.6292483,120.2673082);
                 mMap.addMarker(new MarkerOptions()
                         .position(latLng)
-                        .title("Marker"));
+                        .title("取貨地點"));
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng1, 15));
                 mMap.animateCamera(CameraUpdateFactory.zoomIn());
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
@@ -95,34 +97,9 @@ public class AboutusFragment extends Fragment {
 
 
 
-
-
-
-
         return root;
     }
 
-    /*
-    @Override
-    public void onResume() {
-        super.onResume();
-        mMapView.onResume();
-    }
-    @Override
-    public void onPause() {
-        super.onPause();
-        mMapView.onPause();
-    }
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mMapView.onDestroy();
-    }
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        mMapView.onLowMemory();
-    }*/
 }
 
 

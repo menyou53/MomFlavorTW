@@ -57,33 +57,45 @@ public class NotificationsFragment extends Fragment {
                                     items = new ArrayList<>();
                                     items.add("有新通知");
                                     items.add("歷史訂單");
-                                    items.add("chat");
                                     items.add("面交及匯款資訊");
                                     items.add("Feedback");
-                                    items.add("message");
+                                    items.add("客服中心");
                                     items.add("登出");
 
 
                                     mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                                     mAdapter = new NotificationsAdapter(getActivity(),items);
                                     mRecyclerView.setAdapter(mAdapter);
+
+
                                 }else{
                                     items = new ArrayList<>();
                                     items.add("通知");
                                     items.add("歷史訂單");
-                                    items.add("chat");
                                     items.add("面交及匯款資訊");
                                     items.add("Feedback");
-                                    items.add("6th item");
+                                    items.add("客服中心");
                                     items.add("登出");
 
 
                                     mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                                     mAdapter = new NotificationsAdapter(getActivity(),items);
                                     mRecyclerView.setAdapter(mAdapter);
-
-
                                 }
+                            }else{
+                                items = new ArrayList<>();
+                                items.add("通知");
+                                items.add("歷史訂單");
+                                items.add("chat");
+                                items.add("面交及匯款資訊");
+                                items.add("Feedback");
+                                items.add("客服中心");
+                                items.add("登出");
+
+
+                                mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                                mAdapter = new NotificationsAdapter(getActivity(),items);
+                                mRecyclerView.setAdapter(mAdapter);
                             }
                         }
 
