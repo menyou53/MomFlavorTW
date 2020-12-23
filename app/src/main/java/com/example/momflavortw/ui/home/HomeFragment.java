@@ -11,7 +11,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.momflavortw.R;
-import com.example.momflavortw.ui.image.Upload;
 import com.example.momflavortw.ui.product.SliderAdapterExample;
 import com.example.momflavortw.ui.product.SliderItem;
 import com.example.momflavortw.ui.product.Sliders;
@@ -40,7 +39,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView mRecyclerview,mRecyclerview2;
     private HomeCardAdapter mAdapter;
     private HomeCardAdapter2 mAdapter2;
-    private List<Upload> mUploads,mUploads2;
+    private List<HomeProduct> mHomeProducts,mHomeProducts2;
     SliderView sliderView;
     Handler handler = new Handler();
     Runnable setLayoutVisible;
@@ -54,13 +53,13 @@ public class HomeFragment extends Fragment {
 
 
         mRecyclerview = root.findViewById(R.id.recycler_view_home);
-        mUploads = new ArrayList<>();
+        mHomeProducts = new ArrayList<>();
         LinearLayoutManager m=new LinearLayoutManager(getActivity());
         m.setOrientation(LinearLayoutManager.HORIZONTAL);
         mRecyclerview.setLayoutManager(m);
 
         mRecyclerview2 = root.findViewById(R.id.recycler_view2_home);
-        mUploads2 = new ArrayList<>();
+        mHomeProducts2 = new ArrayList<>();
         mRecyclerview2.setHasFixedSize(true);
         mRecyclerview2.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         home_title_1 = root.findViewById(R.id.home_title_1);
@@ -135,11 +134,11 @@ public class HomeFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                //Log.d("TAG(new)", document.getId() + "=>" + document.getData());
-                                Upload upload = document.toObject(Upload.class);
-                                mUploads.add(upload);
+                                HomeProduct homeProduct = document.toObject(HomeProduct.class);
+                                mHomeProducts.add(homeProduct);
+
                             }
-                            mAdapter = new HomeCardAdapter(getContext(),mUploads);
+                            mAdapter = new HomeCardAdapter(getContext(),mHomeProducts);
                             mRecyclerview.setAdapter(mAdapter);
 
                         } else {
@@ -154,11 +153,10 @@ public class HomeFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                //Log.d("TAG(pop)", document.getId() + "=>" + document.getData());
-                                Upload upload = document.toObject(Upload.class);
-                                mUploads2.add(upload);
+                                HomeProduct homeProduct = document.toObject(HomeProduct.class);
+                                mHomeProducts2.add(homeProduct);
                             }
-                            mAdapter2 = new HomeCardAdapter2(getContext(),mUploads2);
+                            mAdapter2 = new HomeCardAdapter2(getContext(),mHomeProducts2);
                             mRecyclerview2.setAdapter(mAdapter2);
 
                         } else {

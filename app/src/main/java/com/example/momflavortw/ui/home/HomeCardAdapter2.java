@@ -10,6 +10,10 @@ import android.widget.TextView;
 
 import com.example.momflavortw.R;
 import com.example.momflavortw.ui.image.Upload;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -24,10 +28,11 @@ public class HomeCardAdapter2 extends RecyclerView.Adapter<HomeCardAdapter2.Imag
 
     private Context mContext;
     private List<Upload> mUploads;
+    private List<HomeProduct> mHomeProducts;
 
-    public HomeCardAdapter2(Context context,List<Upload> uploads){
+    public HomeCardAdapter2(Context context,List<HomeProduct> homeProducts){
         mContext = context;
-        mUploads = uploads;
+        mHomeProducts = homeProducts;
     }
 
 
@@ -40,30 +45,43 @@ public class HomeCardAdapter2 extends RecyclerView.Adapter<HomeCardAdapter2.Imag
 
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
-        final com.example.momflavortw.ui.image.Upload uploadCurrent = mUploads.get(position);
-        holder.textViewName.setText(uploadCurrent.getName());
+        final HomeProduct homeProductCurrent = mHomeProducts.get(position);
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        holder.textViewName.setText(homeProductCurrent.getName());
         Picasso.get()
-                .load(uploadCurrent.getImageUrl())
+                .load(homeProductCurrent.getImageUrl())
                 .fit()
                 .centerCrop(20)
                 .into(holder.imageView);
+
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putString("product",uploadCurrent.getProduct());
-                bundle.putString("imageUrl",uploadCurrent.getImageUrl());
-                bundle.putString("videoUrl",uploadCurrent.getVideoUrl());
-                bundle.putInt("markup",uploadCurrent.getMarkup());
-                Navigation.findNavController(v).navigate(R.id.action_navigation_home_to_fragment_product, bundle);
-
+            public void onClick(final View v) {
+                db.collection("products").document(homeProductCurrent.getProduct())
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                DocumentSnapshot document = task.getResult();
+                                if(document.exists()){
+                                    Upload upload = document.toObject(Upload.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("product",upload.getProduct());
+                                    bundle.putString("imageUrl",upload.getImageUrl());
+                                    bundle.putString("videoUrl",upload.getVideoUrl());
+                                    bundle.putInt("markup",upload.getMarkup());
+                                    Navigation.findNavController(v).navigate(R.id.action_navigation_home_to_fragment_product, bundle);
+                                }
+                            }
+                        });
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return mUploads.size();
+        return mHomeProducts.size();
 
     }
 
