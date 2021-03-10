@@ -86,7 +86,6 @@ public class NotificationsFragment extends Fragment {
                                 items = new ArrayList<>();
                                 items.add("通知");
                                 items.add("歷史訂單");
-                                items.add("chat");
                                 items.add("面交及匯款資訊");
                                 items.add("Feedback");
                                 items.add("客服中心");

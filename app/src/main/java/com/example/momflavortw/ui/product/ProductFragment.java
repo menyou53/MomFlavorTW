@@ -16,6 +16,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -77,6 +79,11 @@ public class ProductFragment extends Fragment {
     private String[] checkedMarkName;
     private boolean[] checkedMark;
     private String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    private ConstraintLayout constraintVideo;
+    private ProgressBar videoProgressBar;
+    private ScrollView productScroll;
+    Runnable setVideo;
+    Handler handler = new Handler();
 
 
 
@@ -158,14 +165,6 @@ public class ProductFragment extends Fragment {
 
 
 
-        final Handler handler = new Handler();
-
-        final Runnable renewCart = new Runnable() {
-            @Override
-            public void run() {
-                renewNotification();
-            }
-        };
 
 
         spinner = root.findViewById(R.id.spinner);
@@ -185,17 +184,30 @@ public class ProductFragment extends Fragment {
         final TextView textProductTitle = root.findViewById(R.id.textProductTitle);
         final TextView TextNarrative = root.findViewById(R.id.textNarrative);
         final Button btn = root.findViewById(R.id.renewButton);
-        final ConstraintLayout constraintVideo = root.findViewById(R.id.constraintVideo);
+        constraintVideo = root.findViewById(R.id.constraintVideo);
         webView = root.findViewById(R.id.product_webView);
+        videoProgressBar = root.findViewById(R.id.videoProgressBar);
+        productScroll = root.findViewById(R.id.product_scroll);
        // textprice.setText(valueOf(price)+"元");
         textProductTitle.setText(product);
 
+        setVideo = new Runnable() {
+            @Override
+            public void run() {
+                productScroll.setVisibility(View.VISIBLE);
+                videoProgressBar.setVisibility(View.GONE);
+            }
+        };
+
         if(videoUrl.equals("")){
-            constraintVideo.setVisibility(View.GONE);
+            productScroll.setVisibility(View.VISIBLE);
+            //constraintVideo.setVisibility(View.GONE);
         } else {
+            videoProgressBar.setProgress(10);
             webView.getSettings().setJavaScriptEnabled(true);
             webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
             webView.loadUrl(videoUrl);
+            handler.postDelayed(setVideo, 500);
         }
 
 
@@ -320,6 +332,13 @@ public class ProductFragment extends Fragment {
 
 
             return root;
+    }
+
+    public void loadVideo(){
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+        webView.loadUrl(videoUrl);
+        handler.postDelayed(setVideo, 500);
     }
 
 
