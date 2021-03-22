@@ -215,8 +215,7 @@ public class Cart2Fragment extends Fragment {
                         if (document.exists()) {
                             Contact contact = document.toObject(Contact.class);
                             address = contact.getAddress().replace("NN","\n");
-                            textPayment.setText("面交地址為"+address.replace("NN","\n")+"\n\n"+"匯款後請至訂單歷史輸入匯款資訊");
-
+                            textPayment.setText(address.replace("NN","\n")+"\n\n"+"匯款後請至訂單歷史輸入匯款資訊");
                         }
                     }
                 }) ;

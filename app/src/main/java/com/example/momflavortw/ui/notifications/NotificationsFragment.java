@@ -67,7 +67,6 @@ public class NotificationsFragment extends Fragment {
                                     mAdapter = new NotificationsAdapter(getActivity(),items);
                                     mRecyclerView.setAdapter(mAdapter);
 
-
                                 }else{
                                     items = new ArrayList<>();
                                     items.add("通知");

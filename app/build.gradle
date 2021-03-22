@@ -29,6 +29,14 @@ android {
                 enabled = true
             }
 
+    sourceSets {
+        main {
+            res.srcDirs = [
+                    'src/main/res/layout/activity','src/main/res/layout/fragment','src/main/res/layout/item','src/main/res/layout','src/main/res'
+            ]
+        }
+    }
+
 }
 
 dependencies {
@@ -66,6 +74,5 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.google.firebase:firebase-core:17.0.0'
-
 
 }
